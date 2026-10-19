@@ -188,6 +188,8 @@ To run these checks, click the **Quality & Tests** checkmark icon in the app hea
 - **Barcode & Receipt Scanning**: Complement fridge photos with grocery receipt text analysis.
 - **Pantry Expiry Tracking**: Optional browser notification reminders when perishables are nearing typical shelf life.
 
+
+**All Rights Reserved**
 ---
 
 ## License
