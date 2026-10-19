@@ -232,7 +232,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7F6F0] text-[#26352B]">
+    <div className="min-h-screen flex flex-col bg-[#FAF8F1] text-[#26342D]">
       {/* App Navigation Bar */}
       <Header
         onGoHome={() => setCurrentStep('landing')}
@@ -247,12 +247,12 @@ export default function App() {
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6">
         {/* Error Banner when generation fails */}
         {generationError && (
-          <div className="my-4 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+          <div className="my-4 p-4 rounded-2xl bg-[#FDF3F0] border border-[#E98B70] text-[#26342D] text-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
             <div className="flex items-start gap-2.5">
-              <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-[#E98B70] shrink-0 mt-0.5" />
               <div>
                 <p className="font-bold">{generationError.message}</p>
-                <p className="text-xs text-amber-800">
+                <p className="text-xs text-[#66746B]">
                   Your ingredients and preferences are safely preserved. You can retry with Gemma or explore the realistic sample plan.
                 </p>
               </div>
@@ -262,14 +262,14 @@ export default function App() {
               <button
                 onClick={() => handleGenerateMeals(preferences)}
                 disabled={isGeneratingMeals}
-                className="px-3.5 py-1.5 text-xs font-semibold bg-white border border-amber-300 hover:bg-amber-100 rounded-lg transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 text-xs font-bold bg-white border border-[#E8E6DC] hover:border-[#285943]/40 rounded-xl transition-colors cursor-pointer"
               >
                 Retry Request
               </button>
               {generationError.canUseSample && (
                 <button
                   onClick={handleTrySamplePlan}
-                  className="px-3.5 py-1.5 text-xs font-semibold bg-amber-700 hover:bg-amber-800 text-white rounded-lg transition-colors cursor-pointer"
+                  className="px-3.5 py-1.5 text-xs font-bold bg-[#285943] hover:bg-[#1E4332] text-white rounded-xl transition-colors cursor-pointer shadow-2xs"
                 >
                   Switch to Sample Plan
                 </button>
@@ -333,10 +333,10 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-[#E5E7DF] bg-[#F7F6F0]/80 py-8 no-print">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#607266]">
+      <footer className="mt-auto border-t border-[#E8E6DC] bg-[#FAF8F1]/90 py-8 no-print">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#66746B]">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-[#26352B]">SlothPlate</span>
+            <span className="font-bold text-[#26342D]">SlothPlate</span>
             <span>•</span>
             <span>Hacktoberfest 2026 Open-Source AI Challenge (Week 3: Slow and Steady)</span>
           </div>
@@ -344,19 +344,19 @@ export default function App() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsPrivacyModalOpen(true)}
-              className="hover:text-[#26352B] transition-colors"
+              className="hover:text-[#285943] transition-colors cursor-pointer"
             >
               Open AI & Privacy
             </button>
             <button
               onClick={() => setIsQualityModalOpen(true)}
-              className="hover:text-[#26352B] transition-colors"
+              className="hover:text-[#285943] transition-colors cursor-pointer"
             >
               Quality & Tests
             </button>
             <button
               onClick={() => setIsSavedPlansModalOpen(true)}
-              className="hover:text-[#26352B] transition-colors"
+              className="hover:text-[#285943] transition-colors cursor-pointer"
             >
               Saved Plans ({savedPlans.length})
             </button>

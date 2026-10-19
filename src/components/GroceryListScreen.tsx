@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Check, Copy, Printer, Bookmark, Plus, Trash2, ArrowLeft, CheckCircle2, RotateCcw, AlertCircle } from 'lucide-react';
+import { ShoppingBag, Check, Copy, Printer, Bookmark, Plus, Trash2, ArrowLeft, CheckCircle2, RotateCcw, AlertCircle, ShoppingCart } from 'lucide-react';
 import { GroceryItem, IngredientCategory, Recipe, SavedMealPlan } from '../types';
 
 interface GroceryListScreenProps {
@@ -10,6 +10,54 @@ interface GroceryListScreenProps {
   onBackToMeals: () => void;
   isSaved: boolean;
 }
+
+const CATEGORIES_CONFIG: Record<
+  IngredientCategory,
+  { badgeBg: string; text: string; border: string; dot: string }
+> = {
+  Produce: {
+    badgeBg: 'bg-[#F0F5F0]',
+    text: 'text-[#285943]',
+    border: 'border-[#78A878]/50',
+    dot: 'bg-[#78A878]',
+  },
+  'Dairy & Eggs': {
+    badgeBg: 'bg-[#FEF9EB]',
+    text: 'text-[#26342D]',
+    border: 'border-[#F4CF77]',
+    dot: 'bg-[#F4CF77]',
+  },
+  'Bakery & Grains': {
+    badgeBg: 'bg-[#F2F8FA]',
+    text: 'text-[#285943]',
+    border: 'border-[#BFDDE8]',
+    dot: 'bg-[#BFDDE8]',
+  },
+  Proteins: {
+    badgeBg: 'bg-[#FDF3F0]',
+    text: 'text-[#E98B70]',
+    border: 'border-[#E98B70]/50',
+    dot: 'bg-[#E98B70]',
+  },
+  'Pantry & Spices': {
+    badgeBg: 'bg-[#F7F5FC]',
+    text: 'text-[#285943]',
+    border: 'border-[#D9CFF0]',
+    dot: 'bg-[#D9CFF0]',
+  },
+  'Beverages & Condiments': {
+    badgeBg: 'bg-[#F2F8FA]',
+    text: 'text-[#285943]',
+    border: 'border-[#BFDDE8]',
+    dot: 'bg-[#BFDDE8]',
+  },
+  Other: {
+    badgeBg: 'bg-[#FAF8F1]',
+    text: 'text-[#26342D]',
+    border: 'border-[#E8E6DC]',
+    dot: 'bg-[#66746B]',
+  },
+};
 
 const CATEGORIES_ORDER: IngredientCategory[] = [
   'Produce',
@@ -79,7 +127,7 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
   // Copy plain text formatted list
   const copyAsPlainText = () => {
     const needed = groceryList.filter((i) => !i.isAvailable);
-    const lines: string[] = ['=== SlothPlate Grocery List ==='];
+    const lines: string[] = ['=== SlothPlate Smart Grocery List ==='];
     lines.push(`For: ${selectedRecipes.map((r) => r.title).join(' • ')}\n`);
 
     CATEGORIES_ORDER.forEach((cat) => {
@@ -109,8 +157,8 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
   const checkedCount = itemsToBuy.filter((i) => i.isChecked).length;
 
   return (
-    <div className="max-w-4xl mx-auto py-4 sm:py-8 space-y-8">
-      {/* Printable Header (Visible only when printed) */}
+    <div className="max-w-4xl mx-auto py-4 sm:py-8 space-y-7">
+      {/* Printable Header */}
       <div className="hidden print-only mb-6">
         <h1 className="text-2xl font-bold text-black">SlothPlate Consolidated Grocery List</h1>
         <p className="text-sm text-gray-700">
@@ -121,16 +169,16 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
       </div>
 
       {/* Screen Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E7DF] pb-4 no-print">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E8E6DC] pb-4 no-print">
         <div>
-          <span className="text-xs font-semibold text-[#355E46] uppercase tracking-wider">
+          <span className="text-xs font-bold text-[#285943] uppercase tracking-wider">
             Consolidated Plan
           </span>
-          <h2 className="text-2xl font-bold text-[#26352B] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#26342D] tracking-tight">
             Smart Grocery List
           </h2>
-          <p className="text-xs sm:text-sm text-[#607266] mt-0.5">
-            Combined for {selectedRecipes.length} selected meal{selectedRecipes.length > 1 ? 's' : ''}. Quantities are automatically merged.
+          <p className="text-xs sm:text-sm text-[#66746B] mt-1">
+            Merged across {selectedRecipes.length} meal{selectedRecipes.length > 1 ? 's' : ''}. Quantities with matching units are automatically summed.
           </p>
         </div>
 
@@ -138,7 +186,7 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={onBackToMeals}
-            className="text-xs sm:text-sm text-[#607266] hover:text-[#26352B] px-3 py-1.5 rounded-lg hover:bg-[#E5E7DF]/40 transition-colors flex items-center gap-1"
+            className="text-xs sm:text-sm font-semibold text-[#66746B] hover:text-[#26342D] px-3 py-1.5 rounded-xl hover:bg-[#E8E6DC]/40 transition-colors flex items-center gap-1.5 cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Change Meals</span>
@@ -146,26 +194,26 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
 
           <button
             onClick={copyAsPlainText}
-            className="px-3 py-1.5 text-xs sm:text-sm font-medium text-[#26352B] bg-white border border-[#E5E7DF] hover:border-[#355E46]/40 rounded-lg shadow-xs hover:bg-[#F7F6F0] transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-1.5 text-xs sm:text-sm font-bold text-[#26342D] bg-white border border-[#E8E6DC] hover:border-[#285943]/40 rounded-xl shadow-2xs hover:bg-[#FAF8F1] transition-colors flex items-center gap-1.5 cursor-pointer"
           >
-            <Copy className="w-3.5 h-3.5 text-[#355E46]" />
-            <span>{copiedToast ? 'Copied to Clipboard!' : 'Copy Text'}</span>
+            <Copy className="w-3.5 h-3.5 text-[#285943]" />
+            <span>{copiedToast ? 'Copied!' : 'Copy Text'}</span>
           </button>
 
           <button
             onClick={handlePrint}
-            className="px-3 py-1.5 text-xs sm:text-sm font-medium text-[#26352B] bg-white border border-[#E5E7DF] hover:border-[#355E46]/40 rounded-lg shadow-xs hover:bg-[#F7F6F0] transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-1.5 text-xs sm:text-sm font-bold text-[#26342D] bg-white border border-[#E8E6DC] hover:border-[#285943]/40 rounded-xl shadow-2xs hover:bg-[#FAF8F1] transition-colors flex items-center gap-1.5 cursor-pointer"
           >
-            <Printer className="w-3.5 h-3.5 text-[#355E46]" />
+            <Printer className="w-3.5 h-3.5 text-[#285943]" />
             <span>Print List</span>
           </button>
 
           <button
             onClick={onSavePlan}
-            className={`px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer ${
+            className={`px-4 py-2 text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer ${
               isSaved
-                ? 'bg-[#DCE8D8] text-[#355E46]'
-                : 'bg-[#355E46] hover:bg-[#23402F] text-white'
+                ? 'bg-[#F0F5F0] text-[#285943] border border-[#78A878]'
+                : 'bg-[#285943] hover:bg-[#1E4332] text-white hover:shadow-md'
             }`}
           >
             <Bookmark className="w-3.5 h-3.5" />
@@ -175,20 +223,20 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
       </div>
 
       {/* Selected Meals Summary Cards */}
-      <div className="bg-white rounded-2xl border border-[#E5E7DF] p-5 space-y-3 shadow-xs no-print">
-        <h3 className="font-bold text-sm text-[#26352B] uppercase tracking-wider">
+      <div className="bg-white rounded-2xl border border-[#E8E6DC] p-5 space-y-3.5 shadow-xs no-print">
+        <h3 className="font-extrabold text-xs text-[#26342D] uppercase tracking-wider">
           Included Meals in this list:
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {selectedRecipes.map((recipe) => (
             <div
               key={recipe.id}
-              className="p-3 rounded-xl bg-[#F7F6F0] border border-[#E5E7DF] space-y-1"
+              className="p-3.5 rounded-xl bg-[#FAF8F1] border border-[#E8E6DC] space-y-1"
             >
-              <h4 className="font-semibold text-xs sm:text-sm text-[#26352B] leading-tight">
+              <h4 className="font-bold text-xs sm:text-sm text-[#26342D] leading-tight">
                 {recipe.title}
               </h4>
-              <div className="text-[11px] text-[#607266] flex items-center gap-2">
+              <div className="text-[11px] text-[#66746B] flex items-center gap-2">
                 <span>{recipe.totalTimeMinutes}m total</span>
                 <span>•</span>
                 <span>{recipe.dishCount} dish</span>
@@ -198,18 +246,18 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
         </div>
       </div>
 
-      {/* Shopping Progress Bar (for in-store use) */}
+      {/* Shopping Progress Bar with Leaf Green Fill */}
       {itemsToBuy.length > 0 && (
-        <div className="bg-[#DCE8D8]/40 border border-[#DCE8D8] rounded-xl p-3.5 flex items-center justify-between text-xs text-[#26352B] no-print">
+        <div className="bg-[#F0F5F0] border border-[#78A878]/40 rounded-2xl p-4 flex items-center justify-between text-xs text-[#26342D] shadow-2xs no-print">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-[#355E46]" />
+            <CheckCircle2 className="w-4 h-4 text-[#78A878]" />
             <span>
               <strong>Shopping Progress:</strong> {checkedCount} of {itemsToBuy.length} items collected
             </span>
           </div>
-          <div className="w-24 sm:w-36 bg-white h-2 rounded-full overflow-hidden border border-[#DCE8D8]">
+          <div className="w-28 sm:w-44 bg-white h-2.5 rounded-full overflow-hidden border border-[#78A878]/30">
             <div
-              className="bg-[#355E46] h-full transition-all"
+              className="bg-[#285943] h-full transition-all"
               style={{
                 width: `${itemsToBuy.length > 0 ? (checkedCount / itemsToBuy.length) * 100 : 0}%`,
               }}
@@ -219,30 +267,30 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
       )}
 
       {/* Add Custom Item Input Form */}
-      <div className="bg-white rounded-2xl border border-[#E5E7DF] p-4.5 space-y-3 shadow-xs no-print">
-        <span className="text-xs font-bold text-[#26352B] uppercase tracking-wider block">
+      <div className="bg-white rounded-2xl border border-[#E8E6DC] p-5 space-y-3 shadow-xs no-print">
+        <span className="text-xs font-bold text-[#26342D] uppercase tracking-wider block">
           Add an extra grocery item
         </span>
 
-        <form onSubmit={handleAddItem} className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+        <form onSubmit={handleAddItem} className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
           <input
             type="text"
             value={newItemName}
             onChange={(e) => setNewItemName(e.target.value)}
             placeholder="Item name (e.g. Oat milk, Lemons)"
-            className="sm:col-span-5 text-xs px-3 py-2 rounded-xl border border-[#E5E7DF] focus:outline-none focus:border-[#355E46]"
+            className="sm:col-span-5 text-xs px-3.5 py-2.5 rounded-xl border border-[#E8E6DC] focus:outline-none focus:border-[#285943]"
           />
           <input
             type="text"
             value={newItemQty}
             onChange={(e) => setNewItemQty(e.target.value)}
             placeholder="Qty (e.g. 1 carton, 3 pcs)"
-            className="sm:col-span-3 text-xs px-3 py-2 rounded-xl border border-[#E5E7DF] focus:outline-none focus:border-[#355E46]"
+            className="sm:col-span-3 text-xs px-3.5 py-2.5 rounded-xl border border-[#E8E6DC] focus:outline-none focus:border-[#285943]"
           />
           <select
             value={newItemCategory}
             onChange={(e) => setNewItemCategory(e.target.value as IngredientCategory)}
-            className="sm:col-span-2 text-xs px-2.5 py-2 rounded-xl border border-[#E5E7DF] focus:outline-none focus:border-[#355E46] bg-white"
+            className="sm:col-span-2 text-xs px-3 py-2.5 rounded-xl border border-[#E8E6DC] focus:outline-none focus:border-[#285943] bg-white cursor-pointer"
           >
             {CATEGORIES_ORDER.map((cat) => (
               <option key={cat} value={cat}>
@@ -252,7 +300,7 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
           </select>
           <button
             type="submit"
-            className="sm:col-span-2 py-2 bg-[#355E46] hover:bg-[#23402F] text-white font-medium text-xs rounded-xl flex items-center justify-center gap-1 transition-colors cursor-pointer"
+            className="sm:col-span-2 py-2.5 bg-[#285943] hover:bg-[#1E4332] text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1 transition-colors cursor-pointer shadow-2xs"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Item</span>
@@ -263,30 +311,34 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
       {/* Grouped Grocery Items List */}
       <div className="space-y-6">
         {itemsToBuy.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-[#E5E7DF] p-10 text-center space-y-2">
-            <CheckCircle2 className="w-8 h-8 text-[#355E46] mx-auto" />
-            <h3 className="font-bold text-base text-[#26352B]">
+          <div className="bg-white rounded-2xl border border-[#E8E6DC] p-10 text-center space-y-2 shadow-xs">
+            <CheckCircle2 className="w-10 h-10 text-[#78A878] mx-auto" />
+            <h3 className="font-extrabold text-base text-[#26342D]">
               Your fridge already has everything needed!
             </h3>
-            <p className="text-xs text-[#607266]">
-              All ingredients for your selected meals are already confirmed available. Zero grocery run needed.
+            <p className="text-xs text-[#66746B]">
+              All ingredients for your selected meals are confirmed available. Zero grocery shopping run needed.
             </p>
           </div>
         ) : (
           CATEGORIES_ORDER.map((category) => {
             const items = itemsToBuy.filter((item) => item.category === category);
             if (items.length === 0) return null;
+            const config = CATEGORIES_CONFIG[category];
 
             return (
               <div
                 key={category}
-                className="bg-white rounded-2xl border border-[#E5E7DF] p-5 space-y-3 shadow-xs"
+                className="bg-white rounded-2xl border border-[#E8E6DC] p-5 sm:p-6 space-y-3.5 shadow-xs"
               >
-                <div className="flex items-center justify-between border-b border-[#E5E7DF] pb-2">
-                  <h3 className="font-bold text-sm text-[#26352B] tracking-tight">
-                    {category}
-                  </h3>
-                  <span className="text-xs text-[#607266]">
+                <div className="flex items-center justify-between border-b border-[#E8E6DC] pb-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2.5 h-2.5 rounded-full ${config.dot}`} />
+                    <h3 className="font-extrabold text-sm text-[#26342D] tracking-tight">
+                      {category}
+                    </h3>
+                  </div>
+                  <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${config.badgeBg} ${config.text} border ${config.border}`}>
                     {items.length} item{items.length > 1 ? 's' : ''}
                   </span>
                 </div>
@@ -295,10 +347,10 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
                   {items.map((item) => (
                     <div
                       key={item.id}
-                      className={`p-2.5 rounded-xl border transition-colors flex items-center justify-between gap-3 ${
+                      className={`p-3 rounded-xl border transition-all flex items-center justify-between gap-3 ${
                         item.isChecked
-                          ? 'bg-[#F7F6F0]/60 border-transparent text-[#607266] line-through'
-                          : 'bg-white border-[#E5E7DF] text-[#26352B]'
+                          ? 'bg-[#FAF8F1] border-transparent text-[#66746B] line-through'
+                          : 'bg-white border-[#E8E6DC] text-[#26342D] hover:border-[#BFDDE8]'
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -306,17 +358,17 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
                           type="checkbox"
                           checked={item.isChecked}
                           onChange={() => toggleItemCheck(item.id)}
-                          className="w-4 h-4 rounded text-[#355E46] focus:ring-[#355E46] cursor-pointer"
+                          className="w-4 h-4 rounded text-[#285943] focus:ring-[#285943] cursor-pointer"
                         />
                         <div>
-                          <span className="font-semibold text-xs sm:text-sm">
+                          <span className="font-bold text-xs sm:text-sm">
                             {item.name}
                           </span>
-                          <span className="ml-2 text-xs font-medium text-[#607266] bg-[#F7F6F0] px-2 py-0.5 rounded">
+                          <span className="ml-2 text-xs font-semibold text-[#285943] bg-[#F2F8FA] px-2.5 py-0.5 rounded-md border border-[#BFDDE8]">
                             {item.quantity}
                           </span>
                           {item.recipeSources.length > 0 && (
-                            <span className="text-[10px] text-[#607266] block pt-0.5">
+                            <span className="text-[10px] text-[#66746B] block pt-0.5">
                               Needed for: {item.recipeSources.join(', ')}
                             </span>
                           )}
@@ -326,14 +378,14 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
                       <div className="flex items-center gap-2 no-print shrink-0">
                         <button
                           onClick={() => toggleAvailability(item.id)}
-                          className="text-[11px] font-medium text-[#355E46] hover:underline px-2 py-1 rounded hover:bg-[#DCE8D8]/40"
+                          className="text-[11px] font-bold text-[#285943] hover:underline px-2 py-1 rounded-lg hover:bg-[#F0F5F0] transition-colors cursor-pointer"
                           title="Mark that you already have this in pantry"
                         >
                           I have this
                         </button>
                         <button
                           onClick={() => deleteItem(item.id)}
-                          className="p-1 text-[#607266] hover:text-rose-600 rounded transition-colors"
+                          className="p-1.5 text-[#66746B] hover:text-[#E98B70] rounded-lg transition-colors cursor-pointer"
                           title="Delete from list"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -347,15 +399,15 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
           })
         )}
 
-        {/* Already In Fridge Section (Accordion or Collapsed view) */}
+        {/* Already In Fridge Section */}
         {itemsInPantry.length > 0 && (
-          <div className="bg-[#F7F6F0] rounded-2xl border border-[#E5E7DF] p-5 space-y-3 no-print">
+          <div className="bg-[#FAF8F1] rounded-2xl border border-[#E8E6DC] p-5 space-y-3 no-print">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-xs uppercase tracking-wider text-[#355E46]">
+                <h3 className="font-extrabold text-xs uppercase tracking-wider text-[#285943]">
                   Already In Your Fridge ({itemsInPantry.length})
                 </h3>
-                <p className="text-[11px] text-[#607266]">
+                <p className="text-[11px] text-[#66746B]">
                   These confirmed pantry items were excluded from your shopping cart.
                 </p>
               </div>
@@ -365,13 +417,13 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
               {itemsInPantry.map((item) => (
                 <div
                   key={item.id}
-                  className="px-2.5 py-1 rounded-lg bg-white border border-[#E5E7DF] text-xs text-[#26352B] flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded-xl bg-white border border-[#E8E6DC] text-xs font-medium text-[#26342D] flex items-center gap-2 shadow-2xs"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#355E46]" />
+                  <span className="w-2 h-2 rounded-full bg-[#78A878]" />
                   <span>{item.name}</span>
                   <button
                     onClick={() => toggleAvailability(item.id)}
-                    className="text-[10px] text-[#607266] hover:text-[#26352B] ml-1 underline"
+                    className="text-[11px] font-semibold text-[#E98B70] hover:underline ml-1 cursor-pointer"
                     title="Move back to shopping list"
                   >
                     Need to buy

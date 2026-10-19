@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Camera, Upload, Trash2, Plus, AlertCircle, Sparkles, Check, HelpCircle, RefreshCw, ArrowRight } from 'lucide-react';
-import { ConfidenceLevel, Ingredient, IngredientCategory } from '../types';
+import { Camera, Upload, Trash2, Plus, AlertCircle, Sparkles, Check, HelpCircle, RefreshCw, ArrowRight, ShieldCheck, CheckCircle2, HelpCircle as QuestionIcon } from 'lucide-react';
+import { ConfidenceLevel, Ingredient } from '../types';
 import { validateImageFile, validateIngredientInput, sanitizeIngredientName } from '../utils/validation';
 
 interface IngredientScannerProps {
@@ -30,7 +30,6 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
   const [manualNotes, setManualNotes] = useState('');
   const [isScanning, setIsScanning] = useState(false);
   const [errorNotice, setErrorNotice] = useState<string | null>(null);
-  const [scanAttempted, setScanAttempted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Handle file uploads
@@ -53,13 +52,11 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
         return;
       }
 
-      // Convert file to base64
       try {
         const base64Data = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = () => {
             const result = reader.result as string;
-            // Extract pure base64 without prefix
             const clean = result.split(',')[1] || '';
             resolve(clean);
           };
@@ -101,7 +98,6 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
 
     setIsScanning(true);
     setErrorNotice(null);
-    setScanAttempted(true);
 
     try {
       const payload = {
@@ -125,7 +121,6 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
       }
 
       if (Array.isArray(data.data) && data.data.length > 0) {
-        // Merge with existing ingredients avoiding exact duplicates
         setIngredients((prev) => {
           const existingNames = new Set(prev.map((i) => i.name.toLowerCase()));
           const novel = (data.data as Ingredient[]).filter(
@@ -171,8 +166,18 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
     setErrorNotice(null);
   };
 
-  // Quick suggestion chips
-  const quickSuggestions = ['Eggs', 'Cheddar cheese', 'Spinach', 'Cherry tomatoes', 'Sourdough bread', 'Garlic', 'Butter', 'Olive oil'];
+  // Quick suggestion chips with varied pastel colors
+  const quickSuggestions = [
+    { name: 'Eggs', color: 'bg-[#FEF9EB] text-[#26342D] border-[#F4CF77]' },
+    { name: 'Cheddar cheese', color: 'bg-[#FEF9EB] text-[#26342D] border-[#F4CF77]' },
+    { name: 'Spinach', color: 'bg-[#F0F5F0] text-[#285943] border-[#78A878]' },
+    { name: 'Cherry tomatoes', color: 'bg-[#FDF3F0] text-[#26342D] border-[#E98B70]' },
+    { name: 'Sourdough bread', color: 'bg-[#FAF8F1] text-[#26342D] border-[#E8E6DC]' },
+    { name: 'Garlic', color: 'bg-[#F2F8FA] text-[#285943] border-[#BFDDE8]' },
+    { name: 'Butter', color: 'bg-[#FEF9EB] text-[#26342D] border-[#F4CF77]' },
+    { name: 'Olive oil', color: 'bg-[#F0F5F0] text-[#285943] border-[#78A878]' },
+  ];
+
   const addSuggestion = (name: string) => {
     if (ingredients.some((i) => i.name.toLowerCase() === name.toLowerCase())) return;
     setIngredients((prev) => [
@@ -207,46 +212,46 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-4 sm:py-8 space-y-8">
+    <div className="max-w-3xl mx-auto py-4 sm:py-8 space-y-7">
       {/* Step Header */}
-      <div className="flex items-center justify-between border-b border-[#E5E7DF] pb-4">
+      <div className="flex items-center justify-between border-b border-[#E8E6DC] pb-4">
         <div>
-          <span className="text-xs font-semibold text-[#355E46] uppercase tracking-wider">
+          <span className="text-xs font-bold text-[#285943] uppercase tracking-wider">
             Step 1 of 3
           </span>
-          <h2 className="text-2xl font-bold text-[#26352B] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#26342D] tracking-tight">
             What's in your fridge or pantry?
           </h2>
-          <p className="text-xs sm:text-sm text-[#607266] mt-0.5">
-            Upload up to 3 photos or type ingredients manually. You can review and edit every item.
+          <p className="text-xs sm:text-sm text-[#66746B] mt-1">
+            Snap photos of your shelves or type items. You can review and adjust every detected estimate.
           </p>
         </div>
         <button
           onClick={onBack}
-          className="text-xs sm:text-sm text-[#607266] hover:text-[#26352B] px-3 py-1.5 rounded-lg hover:bg-[#E5E7DF]/40 transition-colors"
+          className="text-xs sm:text-sm font-semibold text-[#66746B] hover:text-[#26342D] px-3 py-1.5 rounded-xl hover:bg-[#E8E6DC]/40 transition-colors cursor-pointer"
         >
           Back
         </button>
       </div>
 
-      {/* Image Upload Zone */}
-      <div className="bg-white rounded-2xl border border-[#E5E7DF] p-5 sm:p-6 space-y-4 shadow-xs">
+      {/* Image Upload Zone with Pale Mint / Powder Blue tint */}
+      <div className="bg-white rounded-2xl border border-[#E8E6DC] p-5 sm:p-7 space-y-5 shadow-xs">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-[#26352B] flex items-center gap-2">
-            <Camera className="w-4 h-4 text-[#355E46]" />
+          <label className="text-sm font-bold text-[#26342D] flex items-center gap-2">
+            <Camera className="w-4 h-4 text-[#285943]" />
             Upload Fridge Photos (Max 3)
           </label>
-          <span className="text-xs text-[#607266]">
+          <span className="text-xs font-semibold text-[#66746B] bg-[#F2F8FA] px-2.5 py-0.5 rounded-full border border-[#BFDDE8]">
             {images.length}/3 uploaded • Max 5MB each
           </span>
         </div>
 
         {/* Upload Thumbnails & Add Button */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
           {images.map((img, idx) => (
             <div
               key={img.id}
-              className="relative aspect-square rounded-xl overflow-hidden border border-[#E5E7DF] bg-[#F7F6F0] group"
+              className="relative aspect-square rounded-2xl overflow-hidden border border-[#E8E6DC] bg-[#FAF8F1] group shadow-2xs"
             >
               <img
                 src={img.previewUrl}
@@ -255,12 +260,12 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
               />
               <button
                 onClick={() => removeImage(img.id)}
-                className="absolute top-1.5 right-1.5 p-1 bg-white/90 hover:bg-white text-rose-600 rounded-lg shadow-xs transition-colors"
+                className="absolute top-1.5 right-1.5 p-1.5 bg-white/95 hover:bg-white text-[#E98B70] hover:text-rose-600 rounded-lg shadow-sm transition-colors cursor-pointer"
                 title="Remove photo"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
-              <div className="absolute bottom-1 left-1.5 text-[10px] bg-black/60 text-white px-1.5 py-0.5 rounded">
+              <div className="absolute bottom-1.5 left-1.5 text-[10px] font-bold bg-[#26342D]/80 text-white px-2 py-0.5 rounded-md backdrop-blur-xs">
                 Photo {idx + 1}
               </div>
             </div>
@@ -269,15 +274,15 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
           {images.length < 3 && (
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="aspect-square rounded-xl border-2 border-dashed border-[#DCE8D8] hover:border-[#355E46] bg-[#F7F6F0]/60 hover:bg-[#F7F6F0] flex flex-col items-center justify-center p-3 text-center transition-colors group cursor-pointer"
+              className="aspect-square rounded-2xl border-2 border-dashed border-[#BFDDE8] hover:border-[#285943] bg-[#F2F8FA] hover:bg-[#FAF8F1] flex flex-col items-center justify-center p-3 text-center transition-all group cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-full bg-white text-[#355E46] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform mb-1.5">
-                <Upload className="w-4 h-4" />
+              <div className="w-10 h-10 rounded-xl bg-white text-[#285943] border border-[#BFDDE8] flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform mb-2">
+                <Upload className="w-4 h-4 text-[#285943]" />
               </div>
-              <span className="text-xs font-semibold text-[#26352B]">
+              <span className="text-xs font-bold text-[#26342D]">
                 {images.length === 0 ? 'Upload Photo' : 'Add another'}
               </span>
-              <span className="text-[10px] text-[#607266]">JPG, PNG, WebP</span>
+              <span className="text-[10px] text-[#66746B] mt-0.5">JPEG, PNG, WebP</span>
             </button>
           )}
         </div>
@@ -293,77 +298,77 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
 
         {/* Optional Notes */}
         <div>
-          <label className="text-xs font-medium text-[#607266] block mb-1">
-            Optional notes about your fridge (e.g. "Leftover rice in the plastic container, 4 eggs in carton"):
+          <label className="text-xs font-semibold text-[#66746B] block mb-1.5">
+            Optional notes about your fridge (e.g. "Leftover rice in plastic container, 4 eggs in door rack"):
           </label>
           <input
             type="text"
             value={manualNotes}
             onChange={(e) => setManualNotes(e.target.value)}
-            placeholder="e.g. half block of cheddar on top shelf, spinach in crisper"
-            className="w-full text-xs px-3 py-2 rounded-lg border border-[#E5E7DF] bg-[#F7F6F0]/40 focus:bg-white focus:outline-none focus:border-[#355E46] transition-colors"
+            placeholder="e.g. half block of sharp cheddar, fresh spinach in crisper"
+            className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-[#E8E6DC] bg-[#FAF8F1]/60 focus:bg-white focus:outline-none focus:border-[#285943] transition-colors"
           />
         </div>
 
-        {/* Privacy & Safety Notice */}
-        <div className="p-3 rounded-xl bg-[#F7F6F0] border border-[#E5E7DF] flex items-start gap-2.5 text-xs text-[#607266]">
-          <HelpCircle className="w-4 h-4 text-[#355E46] shrink-0 mt-0.5" />
+        {/* Privacy & Safety Notice with Powder Blue tint */}
+        <div className="p-3.5 rounded-xl bg-[#F2F8FA] border border-[#BFDDE8] flex items-start gap-2.5 text-xs text-[#26342D]">
+          <ShieldCheck className="w-4 h-4 text-[#285943] shrink-0 mt-0.5" />
           <div className="leading-relaxed">
-            <strong className="text-[#26352B]">Privacy notice:</strong> Photos are sent to the hosted open-weight Gemma model provider for ingredient recognition. Photos are processed in memory and are not permanently saved by SlothPlate.
+            <strong className="text-[#26342D]">Privacy note:</strong> Photos are sent to the hosted open-weight Gemma model for real-time ingredient analysis. Photos are processed in memory and are never permanently stored.
           </div>
         </div>
 
         {/* Scan Action Button */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
+        <div className="pt-2 flex flex-col sm:flex-row items-center gap-3.5">
           <button
             onClick={handleIdentifyIngredients}
             disabled={isScanning || (images.length === 0 && !manualNotes.trim())}
-            className={`w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-xs transition-all ${
+            className={`w-full sm:w-auto px-7 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-xs transition-all ${
               isScanning || (images.length === 0 && !manualNotes.trim())
-                ? 'bg-[#E5E7DF] text-[#607266] cursor-not-allowed'
-                : 'bg-[#355E46] hover:bg-[#23402F] text-white cursor-pointer'
+                ? 'bg-[#E8E6DC] text-[#66746B] cursor-not-allowed'
+                : 'bg-[#285943] hover:bg-[#1E4332] text-white cursor-pointer hover:shadow'
             }`}
           >
             {isScanning ? (
               <>
-                <RefreshCw className="w-4 h-4 animate-spin" />
-                <span>Gemma is analyzing photo...</span>
+                <RefreshCw className="w-4 h-4 animate-spin text-[#F4CF77]" />
+                <span>Gemma 4 is inspecting fridge...</span>
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 text-[#EDAD85]" />
+                <Sparkles className="w-4 h-4 text-[#F4CF77]" />
                 <span>Identify ingredients</span>
               </>
             )}
           </button>
 
-          <span className="text-xs text-[#607266]">or</span>
+          <span className="text-xs text-[#66746B] hidden sm:inline">or</span>
 
           <button
             onClick={onUseSampleIngredients}
-            className="text-xs font-medium text-[#355E46] hover:underline"
+            className="text-xs font-bold text-[#285943] hover:underline cursor-pointer"
           >
-            Load sample ingredients (Eggs, Cheese, Spinach, Bread)
+            Load sample ingredients (Eggs, Cheddar, Spinach, Sourdough)
           </button>
         </div>
       </div>
 
-      {/* Error / Alert notice */}
+      {/* Error Notice */}
       {errorNotice && (
-        <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+        <div className="p-4 rounded-2xl bg-[#FDF3F0] border border-[#E98B70] text-[#26342D] text-xs sm:text-sm flex items-start gap-3 shadow-2xs">
+          <AlertCircle className="w-5 h-5 text-[#E98B70] shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <p className="font-semibold">{errorNotice}</p>
-            <p className="text-xs text-amber-800">
-              You can still type your ingredients manually below or click "Load sample ingredients" to proceed without disruption.
+            <p className="font-bold">{errorNotice}</p>
+            <p className="text-xs text-[#66746B]">
+              You can still type ingredients manually below or click "Load sample ingredients" to proceed without delay.
             </p>
           </div>
         </div>
       )}
 
       {/* Manual Input Form */}
-      <div className="bg-white rounded-2xl border border-[#E5E7DF] p-5 sm:p-6 space-y-4 shadow-xs">
-        <label className="text-sm font-semibold text-[#26352B] block">
+      <div className="bg-white rounded-2xl border border-[#E8E6DC] p-5 sm:p-6 space-y-4 shadow-xs">
+        <label className="text-sm font-bold text-[#26342D] block">
           Add or Type Ingredients Manually
         </label>
 
@@ -372,12 +377,12 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
             type="text"
             value={manualInput}
             onChange={(e) => setManualInput(e.target.value)}
-            placeholder="e.g. Baby spinach, 4 Eggs, Sourdough bread"
-            className="flex-1 text-sm px-3.5 py-2.5 rounded-xl border border-[#E5E7DF] focus:outline-none focus:border-[#355E46] transition-colors"
+            placeholder="e.g. Baby spinach, 4 Eggs, Sharp cheddar, Sourdough"
+            className="flex-1 text-sm px-3.5 py-2.5 rounded-xl border border-[#E8E6DC] focus:outline-none focus:border-[#285943] transition-colors"
           />
           <button
             type="submit"
-            className="px-4 py-2.5 rounded-xl bg-[#355E46] hover:bg-[#23402F] text-white font-medium text-sm flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-5 py-2.5 rounded-xl bg-[#285943] hover:bg-[#1E4332] text-white font-bold text-sm flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
           >
             <Plus className="w-4 h-4" />
             <span>Add</span>
@@ -385,19 +390,19 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
         </form>
 
         {/* Quick Suggestion Chips */}
-        <div className="space-y-1.5">
-          <span className="text-[11px] font-medium text-[#607266] uppercase tracking-wider">
+        <div className="space-y-2 pt-1">
+          <span className="text-[11px] font-bold text-[#66746B] uppercase tracking-wider block">
             Quick additions:
           </span>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2">
             {quickSuggestions.map((item) => (
               <button
-                key={item}
-                onClick={() => addSuggestion(item)}
-                className="px-2.5 py-1 text-xs rounded-lg bg-[#F7F6F0] hover:bg-[#DCE8D8] text-[#26352B] border border-[#E5E7DF] transition-colors flex items-center gap-1 cursor-pointer"
+                key={item.name}
+                onClick={() => addSuggestion(item.name)}
+                className={`px-3 py-1 text-xs rounded-xl font-medium border transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs hover:scale-102 ${item.color}`}
               >
-                <Plus className="w-3 h-3 text-[#355E46]" />
-                {item}
+                <Plus className="w-3 h-3 text-[#285943]" />
+                {item.name}
               </button>
             ))}
           </div>
@@ -405,20 +410,20 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
       </div>
 
       {/* Confirmed / Detected Ingredients List */}
-      <div className="bg-white rounded-2xl border border-[#E5E7DF] p-5 sm:p-6 space-y-5 shadow-xs">
-        <div className="flex items-center justify-between border-b border-[#E5E7DF] pb-3">
+      <div className="bg-white rounded-2xl border border-[#E8E6DC] p-5 sm:p-7 space-y-5 shadow-xs">
+        <div className="flex items-center justify-between border-b border-[#E8E6DC] pb-3.5">
           <div>
-            <h3 className="font-bold text-base text-[#26352B]">
+            <h3 className="font-extrabold text-base text-[#26342D]">
               Confirmed Ingredients ({ingredients.length})
             </h3>
-            <p className="text-xs text-[#607266]">
-              Review, edit estimated quantities, or remove any items.
+            <p className="text-xs text-[#66746B]">
+              Review, edit estimated quantities, or remove items before generating meals.
             </p>
           </div>
           {ingredients.length > 0 && (
             <button
               onClick={() => setIngredients([])}
-              className="text-xs text-rose-600 hover:underline"
+              className="text-xs font-semibold text-[#E98B70] hover:text-rose-700 hover:underline cursor-pointer"
             >
               Clear all
             </button>
@@ -426,79 +431,89 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
         </div>
 
         {ingredients.length === 0 ? (
-          <div className="py-8 text-center text-[#607266] space-y-2">
-            <p className="text-sm">No ingredients added yet.</p>
+          <div className="py-10 text-center text-[#66746B] space-y-2">
+            <p className="text-sm font-semibold text-[#26342D]">No ingredients added yet.</p>
             <p className="text-xs">
-              Take a fridge photo above, type items in the box, or click a quick addition.
+              Upload a fridge photo above, type items in the box, or click a quick suggestion.
             </p>
           </div>
         ) : (
-          <div className="space-y-2.5">
-            {ingredients.map((ing) => (
-              <div
-                key={ing.id}
-                className="p-3 rounded-xl border border-[#E5E7DF] bg-[#F7F6F0]/40 hover:bg-[#F7F6F0] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 transition-colors"
-              >
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={ing.name}
-                      onChange={(e) => updateIngredient(ing.id, { name: e.target.value })}
-                      className="font-semibold text-sm text-[#26352B] bg-transparent border-b border-transparent hover:border-[#E5E7DF] focus:border-[#355E46] focus:outline-none"
-                    />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {ingredients.map((ing) => {
+              const isHigh = ing.confidence === 'high';
+              return (
+                <div
+                  key={ing.id}
+                  className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between gap-2.5 ${
+                    isHigh
+                      ? 'bg-[#F0F5F0] border-[#78A878]/40 hover:border-[#78A878]'
+                      : 'bg-[#FEF9EB] border-[#F4CF77] hover:border-amber-400'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1">
+                      <input
+                        type="text"
+                        value={ing.name}
+                        onChange={(e) => updateIngredient(ing.id, { name: e.target.value })}
+                        className="font-bold text-sm text-[#26342D] bg-transparent border-b border-transparent hover:border-[#E8E6DC] focus:border-[#285943] focus:outline-none w-full"
+                      />
+                    </div>
 
-                    {/* Confidence badge */}
+                    <button
+                      onClick={() => removeIngredient(ing.id)}
+                      className="p-1 text-[#66746B] hover:text-[#E98B70] rounded-lg hover:bg-white transition-colors cursor-pointer shrink-0"
+                      title="Remove ingredient"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs pt-1 border-t border-black/5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[#66746B] font-medium text-[11px]">Qty:</span>
+                      <input
+                        type="text"
+                        value={ing.estimatedQuantity}
+                        onChange={(e) =>
+                          updateIngredient(ing.id, { estimatedQuantity: e.target.value })
+                        }
+                        placeholder="e.g. 4 pcs, 1 cup"
+                        className="text-xs font-semibold text-[#26342D] bg-white px-2 py-0.5 rounded-md border border-[#E8E6DC] focus:outline-none focus:border-[#285943] w-24"
+                      />
+                    </div>
+
+                    {/* Subtle Confidence Indicator Badge */}
                     <span
-                      className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                        ing.confidence === 'high'
-                          ? 'bg-[#DCE8D8] text-[#355E46]'
-                          : ing.confidence === 'medium'
-                          ? 'bg-amber-100 text-amber-800'
-                          : 'bg-[#FBEFE8] text-[#26352B]'
+                      className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                        isHigh
+                          ? 'bg-white text-[#285943] border border-[#78A878]/40'
+                          : 'bg-white text-[#26342D] border border-[#F4CF77]'
                       }`}
                       title={ing.notes || `Confidence: ${ing.confidence}`}
                     >
-                      {ing.confidence === 'high' ? 'High Confidence' : 'Needs Verification'}
+                      {isHigh ? (
+                        <>
+                          <CheckCircle2 className="w-3 h-3 text-[#78A878]" />
+                          <span>Verified</span>
+                        </>
+                      ) : (
+                        <>
+                          <QuestionIcon className="w-3 h-3 text-amber-600" />
+                          <span>Verify</span>
+                        </>
+                      )}
                     </span>
                   </div>
-
-                  <div className="flex items-center gap-2 text-xs text-[#607266]">
-                    <span>Qty:</span>
-                    <input
-                      type="text"
-                      value={ing.estimatedQuantity}
-                      onChange={(e) =>
-                        updateIngredient(ing.id, { estimatedQuantity: e.target.value })
-                      }
-                      placeholder="e.g. 4 pcs, 1 cup"
-                      className="text-xs text-[#26352B] bg-white px-2 py-0.5 rounded border border-[#E5E7DF] focus:outline-none focus:border-[#355E46] w-28"
-                    />
-                    {ing.notes && (
-                      <span className="italic text-[11px] text-[#607266] truncate max-w-xs">
-                        ({ing.notes})
-                      </span>
-                    )}
-                  </div>
                 </div>
-
-                <div className="flex items-center justify-end gap-2 shrink-0">
-                  <button
-                    onClick={() => removeIngredient(ing.id)}
-                    className="p-1.5 text-[#607266] hover:text-rose-600 rounded-lg hover:bg-white transition-colors"
-                    title="Remove ingredient"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
         {/* Action Button */}
-        <div className="pt-4 border-t border-[#E5E7DF] flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-[#607266]">
+        <div className="pt-4 border-t border-[#E8E6DC] flex flex-col sm:flex-row items-center justify-between gap-3.5">
+          <p className="text-xs text-[#66746B]">
             {ingredients.length > 0
               ? `Ready to plan meals with ${ingredients.length} confirmed ingredient${
                   ingredients.length > 1 ? 's' : ''
@@ -509,10 +524,10 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
           <button
             onClick={handleProceed}
             disabled={ingredients.length === 0}
-            className={`w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-xs transition-all ${
+            className={`w-full sm:w-auto px-7 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-xs transition-all ${
               ingredients.length === 0
-                ? 'bg-[#E5E7DF] text-[#607266] cursor-not-allowed'
-                : 'bg-[#355E46] hover:bg-[#23402F] text-white cursor-pointer'
+                ? 'bg-[#E8E6DC] text-[#66746B] cursor-not-allowed'
+                : 'bg-[#285943] hover:bg-[#1E4332] text-white cursor-pointer hover:shadow'
             }`}
           >
             <span>Confirm & Set Preferences</span>

@@ -69,7 +69,8 @@ export function checkDietaryViolations(
   // Allergy / Avoid check
   for (const avoid of preferences.allergiesToAvoid) {
     const avoidClean = avoid.trim().toLowerCase();
-    if (avoidClean && lower.includes(avoidClean)) {
+    const avoidRoot = avoidClean.endsWith('s') && !avoidClean.endsWith('ss') ? avoidClean.slice(0, -1) : avoidClean;
+    if (avoidClean && (lower.includes(avoidClean) || (avoidRoot.length >= 3 && lower.includes(avoidRoot)))) {
       return `Allergy exclusion: "${ingredientName}" matches excluded item "${avoid}".`;
     }
   }

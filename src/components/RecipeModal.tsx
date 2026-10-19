@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Clock, Utensils, CheckCircle, Plus, Minus, AlertCircle, Sparkles, ChefHat } from 'lucide-react';
+import { X, Clock, Utensils, CheckCircle, Plus, Minus, AlertCircle, Sparkles, ChefHat, CheckCircle2 } from 'lucide-react';
 import { Recipe } from '../types';
 import { parseQuantityString, formatAmount } from '../utils/groceryConsolidator';
 
@@ -20,7 +20,6 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
 }) => {
   if (!isOpen || !recipe) return null;
 
-  // Local serving adjustment for this recipe view
   const [currentServings, setCurrentServings] = useState<number>(recipe.servings || 2);
   const baseServings = recipe.servings || 2;
   const ratio = currentServings / (baseServings > 0 ? baseServings : 2);
@@ -35,34 +34,34 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
-      <div className="bg-white w-full max-w-2xl rounded-2xl border border-[#E5E7DF] shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="bg-white w-full max-w-2xl rounded-2xl border border-[#E8E6DC] shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Modal Header */}
-        <div className="p-5 sm:p-6 border-b border-[#E5E7DF] flex items-start justify-between gap-4 bg-[#F7F6F0]/50">
-          <div className="space-y-1">
+        <div className="p-5 sm:p-6 border-b border-[#E8E6DC] flex items-start justify-between gap-4 bg-[#FAF8F1]">
+          <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#DCE8D8] text-[#355E46]">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#F0F5F0] text-[#285943] border border-[#78A878]/30">
                 {recipe.effortLevel}
               </span>
-              <span className="text-xs text-[#607266] flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5" />
+              <span className="text-xs font-medium text-[#66746B] flex items-center gap-1 bg-white px-2 py-0.5 rounded-md border border-[#E8E6DC]">
+                <Clock className="w-3.5 h-3.5 text-[#285943]" />
                 {recipe.totalTimeMinutes} mins total
               </span>
-              <span className="text-xs text-[#607266] flex items-center gap-1">
-                <Utensils className="w-3.5 h-3.5" />
-                {recipe.dishCount} {recipe.dishCount === 1 ? 'dish' : 'dishes'}
+              <span className="text-xs font-medium text-[#66746B] flex items-center gap-1 bg-white px-2 py-0.5 rounded-md border border-[#E8E6DC]">
+                <Utensils className="w-3.5 h-3.5 text-[#285943]" />
+                {recipe.dishCount} {recipe.dishCount === 1 ? 'pan/dish' : 'dishes'}
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-[#26352B] tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-[#26342D] tracking-tight">
               {recipe.title}
             </h2>
-            <p className="text-xs sm:text-sm text-[#607266] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#66746B] leading-relaxed">
               {recipe.description}
             </p>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#607266] hover:text-[#26352B] hover:bg-white transition-colors"
+            className="p-1.5 rounded-xl text-[#66746B] hover:text-[#26342D] hover:bg-white transition-colors cursor-pointer"
             title="Close recipe"
           >
             <X className="w-5 h-5" />
@@ -72,29 +71,29 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
         {/* Modal Content Scrollable Area */}
         <div className="p-5 sm:p-6 overflow-y-auto space-y-6 text-sm">
           {/* Servings Adjuster */}
-          <div className="flex items-center justify-between p-3 rounded-xl bg-[#F7F6F0] border border-[#E5E7DF]">
+          <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#FEF9EB] border border-[#F4CF77]">
             <div>
-              <span className="font-semibold text-xs text-[#26352B] uppercase tracking-wider block">
+              <span className="font-bold text-xs text-[#26342D] uppercase tracking-wider block">
                 Portion Size
               </span>
-              <span className="text-xs text-[#607266]">
-                Adjust servings (quantities update automatically)
+              <span className="text-xs text-[#66746B]">
+                Adjust servings (quantities update dynamically below)
               </span>
             </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setCurrentServings((s) => Math.max(1, s - 1))}
-                className="w-8 h-8 rounded-lg bg-white border border-[#E5E7DF] flex items-center justify-center text-[#26352B] hover:bg-[#DCE8D8] transition-colors"
+                className="w-8 h-8 rounded-lg bg-white border border-[#E8E6DC] flex items-center justify-center text-[#26342D] hover:bg-[#FAF8F1] transition-colors cursor-pointer shadow-2xs font-bold"
                 title="Decrease servings"
               >
                 <Minus className="w-3.5 h-3.5" />
               </button>
-              <span className="font-bold text-sm text-[#26352B] w-12 text-center">
+              <span className="font-extrabold text-sm text-[#26342D] w-14 text-center">
                 {currentServings} {currentServings === 1 ? 'serving' : 'servings'}
               </span>
               <button
                 onClick={() => setCurrentServings((s) => Math.min(12, s + 1))}
-                className="w-8 h-8 rounded-lg bg-white border border-[#E5E7DF] flex items-center justify-center text-[#26352B] hover:bg-[#DCE8D8] transition-colors"
+                className="w-8 h-8 rounded-lg bg-white border border-[#E8E6DC] flex items-center justify-center text-[#26342D] hover:bg-[#FAF8F1] transition-colors cursor-pointer shadow-2xs font-bold"
                 title="Increase servings"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -104,8 +103,8 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
 
           {/* Ingredients Section */}
           <div className="space-y-3">
-            <h3 className="font-bold text-base text-[#26352B] flex items-center gap-2">
-              <ChefHat className="w-4 h-4 text-[#355E46]" />
+            <h3 className="font-extrabold text-base text-[#26342D] flex items-center gap-2">
+              <ChefHat className="w-4 h-4 text-[#285943]" />
               Ingredients Needed
             </h3>
 
@@ -113,29 +112,29 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
               {recipe.ingredients.map((ing, idx) => (
                 <div
                   key={idx}
-                  className={`p-2.5 rounded-xl border text-xs flex items-center justify-between gap-2 ${
+                  className={`p-3 rounded-xl border text-xs flex items-center justify-between gap-2 transition-all ${
                     ing.isAvailable
-                      ? 'bg-white border-[#E5E7DF]'
-                      : 'bg-[#FBEFE8]/60 border-[#EDAD85]/40'
+                      ? 'bg-[#F0F5F0] border-[#78A878]/40'
+                      : 'bg-[#FDF3F0] border-[#E98B70]/50'
                   }`}
                 >
                   <div className="flex items-center gap-2 truncate">
                     <span
                       className={`w-2 h-2 rounded-full shrink-0 ${
-                        ing.isAvailable ? 'bg-[#355E46]' : 'bg-[#EDAD85]'
+                        ing.isAvailable ? 'bg-[#78A878]' : 'bg-[#E98B70]'
                       }`}
                     />
-                    <span className="font-medium text-[#26352B] truncate">
+                    <span className="font-bold text-[#26342D] truncate">
                       {ing.name}
                     </span>
                   </div>
 
                   <div className="text-right shrink-0">
-                    <span className="font-semibold text-[#26352B]">
+                    <span className="font-bold text-[#26342D]">
                       {adjustQuantity(ing.quantity)}
                     </span>
                     {!ing.isAvailable && (
-                      <span className="block text-[10px] text-[#EDAD85] font-semibold">
+                      <span className="block text-[10px] text-[#E98B70] font-bold">
                         Need to buy
                       </span>
                     )}
@@ -147,16 +146,16 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
 
           {/* Step-by-Step Instructions */}
           <div className="space-y-3">
-            <h3 className="font-bold text-base text-[#26352B]">
-              Step-by-Step Cooking Steps
+            <h3 className="font-extrabold text-base text-[#26342D]">
+              Step-by-Step Instructions
             </h3>
-            <ol className="space-y-3 text-xs sm:text-sm text-[#26352B]">
+            <ol className="space-y-3 text-xs sm:text-sm text-[#26342D]">
               {recipe.steps.map((step, idx) => (
                 <li
                   key={idx}
-                  className="flex items-start gap-3 p-3 rounded-xl bg-[#F7F6F0]/50 border border-[#E5E7DF]"
+                  className="flex items-start gap-3 p-3.5 rounded-xl bg-[#FAF8F1] border border-[#E8E6DC]"
                 >
-                  <span className="w-6 h-6 rounded-full bg-[#DCE8D8] text-[#355E46] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="w-6 h-6 rounded-lg bg-[#BFDDE8] text-[#285943] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
                     {idx + 1}
                   </span>
                   <span className="leading-relaxed">{step}</span>
@@ -165,14 +164,14 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
             </ol>
           </div>
 
-          {/* Equipment & Substitutions */}
+          {/* Equipment & Substitutions with Powder Blue & Lavender surfaces */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             {recipe.equipment.length > 0 && (
-              <div className="p-3.5 rounded-xl bg-white border border-[#E5E7DF] space-y-1.5">
-                <span className="font-bold text-[#26352B] uppercase tracking-wider block">
+              <div className="p-4 rounded-xl bg-[#F2F8FA] border border-[#BFDDE8] space-y-1.5">
+                <span className="font-bold text-[#26342D] uppercase tracking-wider block">
                   Equipment Needed
                 </span>
-                <ul className="list-disc list-inside text-[#607266] space-y-1">
+                <ul className="list-disc list-inside text-[#66746B] space-y-1">
                   {recipe.equipment.map((eq, i) => (
                     <li key={i}>{eq}</li>
                   ))}
@@ -181,11 +180,11 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
             )}
 
             {recipe.substitutions.length > 0 && (
-              <div className="p-3.5 rounded-xl bg-white border border-[#E5E7DF] space-y-1.5">
-                <span className="font-bold text-[#26352B] uppercase tracking-wider block">
+              <div className="p-4 rounded-xl bg-[#F7F5FC] border border-[#D9CFF0] space-y-1.5">
+                <span className="font-bold text-[#26342D] uppercase tracking-wider block">
                   Plausible Substitutions
                 </span>
-                <ul className="list-disc list-inside text-[#607266] space-y-1">
+                <ul className="list-disc list-inside text-[#66746B] space-y-1">
                   {recipe.substitutions.map((sub, i) => (
                     <li key={i}>{sub}</li>
                   ))}
@@ -194,13 +193,13 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
             )}
           </div>
 
-          {/* Leftover Suggestion */}
+          {/* Leftover Suggestion with Soft Leaf Green surface */}
           {recipe.leftoverSuggestion && (
-            <div className="p-3.5 rounded-xl bg-[#DCE8D8]/40 border border-[#DCE8D8] text-xs text-[#26352B] space-y-1">
-              <span className="font-bold text-[#355E46] uppercase tracking-wider block">
+            <div className="p-4 rounded-xl bg-[#F0F5F0] border border-[#78A878]/40 text-xs text-[#26342D] space-y-1">
+              <span className="font-bold text-[#285943] uppercase tracking-wider block">
                 Leftover & Repurpose Idea
               </span>
-              <p className="leading-relaxed text-[#26352B]">
+              <p className="leading-relaxed text-[#26342D]">
                 {recipe.leftoverSuggestion}
               </p>
             </div>
@@ -208,25 +207,23 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 sm:p-5 border-t border-[#E5E7DF] bg-[#F7F6F0]/80 flex items-center justify-between gap-3">
+        <div className="p-4 sm:p-5 border-t border-[#E8E6DC] bg-[#FAF8F1] flex items-center justify-between gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-[#607266] hover:text-[#26352B] transition-colors"
+            className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-[#66746B] hover:text-[#26342D] transition-colors cursor-pointer"
           >
             Close
           </button>
 
           <button
-            onClick={() => {
-              onToggleSelect(recipe.id);
-            }}
-            className={`px-6 py-2.5 rounded-xl font-semibold text-xs sm:text-sm flex items-center gap-2 transition-colors cursor-pointer ${
+            onClick={() => onToggleSelect(recipe.id)}
+            className={`px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer shadow-xs ${
               isSelected
-                ? 'bg-[#355E46] text-white hover:bg-[#23402F]'
-                : 'bg-white text-[#26352B] border border-[#E5E7DF] hover:border-[#355E46]'
+                ? 'bg-[#285943] text-white hover:bg-[#1E4332]'
+                : 'bg-white text-[#26342D] border border-[#E8E6DC] hover:border-[#285943]'
             }`}
           >
-            <CheckCircle className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-[#607266]'}`} />
+            <CheckCircle2 className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-[#78A878]'}`} />
             <span>{isSelected ? 'Selected for Meal Plan' : 'Select This Meal'}</span>
           </button>
         </div>

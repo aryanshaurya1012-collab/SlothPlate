@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, Sparkles, Clock, Utensils, ShoppingBag, ArrowRight, Check, ShieldAlert } from 'lucide-react';
+import { Camera, Sparkles, Clock, Utensils, ShoppingBag, ArrowRight, Check, ChefHat, Flame, Salad } from 'lucide-react';
 
 interface LandingHeroProps {
   onStartPlanning: () => void;
@@ -11,184 +11,226 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
   onTrySamplePlan,
 }) => {
   return (
-    <div className="py-8 md:py-14 space-y-12">
-      {/* Hero Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-6">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#DCE8D8] text-[#355E46] text-xs font-semibold tracking-wide uppercase">
-          <Sparkles className="w-3.5 h-3.5" />
-          Hacktoberfest 2026: Slow & Steady Challenge
-        </div>
+    <div className="py-6 sm:py-12 space-y-12 sm:space-y-16">
+      {/* Hero Header with Layered Background Grading */}
+      <div className="relative rounded-3xl p-6 sm:p-12 border border-[#E8E6DC] bg-hero-gradient shadow-xs overflow-hidden">
+        {/* Subtle decorative glow spots */}
+        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-[#78A878]/10 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-10 w-72 h-72 rounded-full bg-[#F4CF77]/15 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-16 right-1/4 w-80 h-80 rounded-full bg-[#BFDDE8]/20 blur-3xl pointer-events-none" />
 
-        <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#26352B] leading-tight font-serif-accent">
-          Your fridge has the ingredients.{' '}
-          <span className="text-[#355E46] block sm:inline">We have the plan.</span>
-        </h1>
+        <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4CF77]/30 border border-[#F4CF77] text-[#26342D] text-xs font-semibold tracking-wide shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-[#285943]" />
+            <span>Hacktoberfest 2026: Slow & Steady Challenge</span>
+          </div>
 
-        <p className="text-base sm:text-lg text-[#607266] max-w-2xl mx-auto leading-relaxed">
-          Avoid the repetitive effort of deciding what to cook and what groceries to buy. 
-          Show SlothPlate what is in your fridge, confirm the ingredients, and receive easy, 
-          low-effort meal options with a consolidated shopping list powered by open-weight AI.
-        </p>
+          {/* Clean Modern Sans-Serif Headline */}
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#26342D] leading-[1.12]">
+            Your fridge has the ingredients.{' '}
+            <span className="text-[#285943] block sm:inline mt-1 sm:mt-0">
+              We have the plan.
+            </span>
+          </h1>
 
-        {/* Action CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <button
-            onClick={onStartPlanning}
-            className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-[#355E46] hover:bg-[#23402F] text-white font-semibold text-base shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 group cursor-pointer"
-          >
-            <span>Plan my meals</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-          </button>
+          <p className="text-base sm:text-lg text-[#66746B] max-w-2xl mx-auto leading-relaxed">
+            Eliminate dinner decision fatigue. Show SlothPlate what is in your fridge or pantry,
+            confirm the items, and get 3 low-effort weeknight meals with a consolidated shopping list
+            powered by open-weight AI.
+          </p>
 
-          <button
-            onClick={onTrySamplePlan}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white hover:bg-[#F7F6F0] border border-[#E5E7DF] hover:border-[#355E46]/40 text-[#26352B] font-semibold text-base shadow-xs transition-colors cursor-pointer"
-          >
-            Try a sample plan
-          </button>
-        </div>
+          {/* Action CTAs */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
+            <button
+              onClick={onStartPlanning}
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#285943] hover:bg-[#1E4332] text-white font-bold text-base shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2.5 group cursor-pointer"
+            >
+              <span>Plan my meals</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
 
-        {/* Trust Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-[#607266] pt-2">
-          <span className="flex items-center gap-1.5">
-            <Check className="w-3.5 h-3.5 text-[#355E46]" /> No account or signup required
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Check className="w-3.5 h-3.5 text-[#355E46]" /> Minimal dirty dishes & cookware
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Check className="w-3.5 h-3.5 text-[#355E46]" /> Powered by Gemma 4 (open-weight)
-          </span>
+            <button
+              onClick={onTrySamplePlan}
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white hover:bg-[#FAF8F1] border border-[#E8E6DC] hover:border-[#285943]/40 text-[#26342D] font-bold text-base shadow-2xs transition-colors cursor-pointer"
+            >
+              Try a sample plan
+            </button>
+          </div>
+
+          {/* Value Pills */}
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2.5 text-xs text-[#66746B] pt-3">
+            <span className="inline-flex items-center gap-1.5 font-medium">
+              <span className="w-2 h-2 rounded-full bg-[#78A878]" />
+              No login or account needed
+            </span>
+            <span className="inline-flex items-center gap-1.5 font-medium">
+              <span className="w-2 h-2 rounded-full bg-[#E98B70]" />
+              One-pot / one-pan cooking priority
+            </span>
+            <span className="inline-flex items-center gap-1.5 font-medium">
+              <span className="w-2 h-2 rounded-full bg-[#BFDDE8]" />
+              Google Gemma 4 open weights
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Visual Showcase Card */}
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl border border-[#E5E7DF] p-6 sm:p-8 shadow-xs">
+      {/* Culinary Showcase Card */}
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl border border-[#E8E6DC] p-6 sm:p-8 shadow-xs">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-7 space-y-4">
-            <div className="inline-block px-2.5 py-1 rounded-md bg-[#FBEFE8] text-[#26352B] text-xs font-medium">
-              Why SlothPlate?
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#FAF8F1] border border-[#E8E6DC] text-[#285943] text-xs font-bold">
+              <ChefHat className="w-3.5 h-3.5 text-[#285943]" />
+              Designed for Low-Effort Cooking
             </div>
-            <h2 className="text-2xl font-bold text-[#26352B] tracking-tight">
-              Cooking shouldn't feel like a second job.
+
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#26342D] tracking-tight">
+              Cooking shouldn't feel like a second shift.
             </h2>
-            <p className="text-sm text-[#607266] leading-relaxed">
-              Most recipe sites throw 20-step gourmet projects at you with 15 exotic spices you will only use once. 
-              SlothPlate is designed for the real world:
+
+            <p className="text-sm text-[#66746B] leading-relaxed">
+              Most recipe sites push 20-step gourmet projects requiring 15 exotic spices you’ll use once.
+              SlothPlate focuses on everyday realism:
             </p>
 
-            <ul className="space-y-2.5 text-sm text-[#26352B]">
-              <li className="flex items-start gap-2.5">
-                <div className="w-5 h-5 rounded-full bg-[#DCE8D8] text-[#355E46] flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="w-3 h-3" />
+            <div className="space-y-3 pt-1">
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-[#F0F5F0] border border-[#78A878]/30">
+                <div className="w-6 h-6 rounded-lg bg-[#78A878] text-white flex items-center justify-center shrink-0 mt-0.5">
+                  <Check className="w-3.5 h-3.5" />
                 </div>
-                <span><strong>Minimal active prep:</strong> Fast weeknight meals ready in 10 to 30 minutes.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <div className="w-5 h-5 rounded-full bg-[#DCE8D8] text-[#355E46] flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="w-3 h-3" />
+                <div className="text-xs">
+                  <strong className="text-[#26342D] block font-semibold">Minimal active prep</strong>
+                  <span className="text-[#66746B]">Simple assemblies ready in 10 to 30 minutes without frantic multitasking.</span>
                 </div>
-                <span><strong>Fewer dishes to wash:</strong> One-pot and one-pan recipes keep sink pileups away.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <div className="w-5 h-5 rounded-full bg-[#DCE8D8] text-[#355E46] flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="w-3 h-3" />
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-[#FEF9EB] border border-[#F4CF77]/50">
+                <div className="w-6 h-6 rounded-lg bg-[#F4CF77] text-[#26342D] flex items-center justify-center shrink-0 mt-0.5">
+                  <Utensils className="w-3.5 h-3.5" />
                 </div>
-                <span><strong>Zero grocery waste:</strong> Shared ingredients overlap across meals so nothing rots in the crisper.</span>
-              </li>
-            </ul>
+                <div className="text-xs">
+                  <strong className="text-[#26342D] block font-semibold">Fewer dirty dishes</strong>
+                  <span className="text-[#66746B]">One-pot and one-pan recipes to keep kitchen sink pileups away.</span>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-[#F2F8FA] border border-[#BFDDE8]/60">
+                <div className="w-6 h-6 rounded-lg bg-[#BFDDE8] text-[#285943] flex items-center justify-center shrink-0 mt-0.5">
+                  <ShoppingBag className="w-3.5 h-3.5" />
+                </div>
+                <div className="text-xs">
+                  <strong className="text-[#26342D] block font-semibold">Smart ingredient crossover</strong>
+                  <span className="text-[#66746B]">Meals share perishable produce so nothing rots in the crisper drawer.</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="md:col-span-5 bg-[#F7F6F0] rounded-xl border border-[#E5E7DF] p-4.5 space-y-3.5">
-            <div className="flex items-center justify-between text-xs text-[#607266] border-b border-[#E5E7DF] pb-2">
-              <span className="font-semibold text-[#26352B]">Sample AI Meal Suggestion</span>
-              <span className="px-2 py-0.5 rounded-full bg-[#DCE8D8] text-[#355E46] font-medium">1 Pan • 12 min</span>
+          {/* Right Card Preview */}
+          <div className="md:col-span-5 bg-[#FAF8F1] rounded-2xl border border-[#E8E6DC] p-5 space-y-4">
+            <div className="flex items-center justify-between text-xs border-b border-[#E8E6DC] pb-2.5">
+              <span className="font-bold text-[#26342D] flex items-center gap-1.5">
+                <Flame className="w-3.5 h-3.5 text-[#E98B70]" />
+                Sample AI Recipe
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full bg-[#F0F5F0] text-[#285943] border border-[#78A878]/30 font-semibold text-[11px]">
+                1 Pan • 12 mins
+              </span>
             </div>
 
             <div>
-              <h3 className="font-bold text-base text-[#26352B]">
+              <h3 className="font-bold text-base text-[#26342D]">
                 Cheesy Spinach & Egg Fold
               </h3>
-              <p className="text-xs text-[#607266] mt-1">
-                Warm skillet scramble with melted sharp cheddar and wilted greens, served over crusty bread.
+              <p className="text-xs text-[#66746B] mt-1 leading-relaxed">
+                Warm skillet scramble with melted sharp cheddar and wilted baby greens over crunchy sourdough toast.
               </p>
             </div>
 
-            <div className="bg-white rounded-lg p-2.5 border border-[#E5E7DF] space-y-1.5 text-xs">
-              <div className="font-semibold text-[#355E46] flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#355E46]"></span>
-                From your fridge:
+            <div className="bg-white rounded-xl p-3 border border-[#E8E6DC] space-y-2 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-[#285943] flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#78A878]" />
+                  In your fridge:
+                </span>
+                <span className="text-[11px] font-semibold text-[#78A878] bg-[#F0F5F0] px-2 py-0.5 rounded-md">
+                  4 items available
+                </span>
               </div>
-              <div className="text-[#607266] pl-3">
-                Eggs, Cheddar cheese, Baby spinach, Sourdough
-              </div>
-              <div className="font-semibold text-[#EDAD85] flex items-center gap-1.5 pt-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#EDAD85]"></span>
-                Need to buy:
-              </div>
-              <div className="text-[#607266] pl-3">
-                None! (100% fridge ready)
+              <p className="text-[#66746B] text-[11px] pl-3.5">
+                Eggs, Sharp Cheddar, Baby Spinach, Sourdough
+              </p>
+
+              <div className="flex items-center justify-between pt-1 border-t border-[#E8E6DC]">
+                <span className="font-bold text-[#66746B] flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#E98B70]" />
+                  Need to buy:
+                </span>
+                <span className="text-[11px] font-semibold text-[#285943] bg-[#F0F5F0] px-2 py-0.5 rounded-md">
+                  100% on hand
+                </span>
               </div>
             </div>
 
             <button
               onClick={onTrySamplePlan}
-              className="w-full py-2 text-xs font-semibold text-[#355E46] bg-white border border-[#355E46]/30 hover:bg-[#DCE8D8]/50 rounded-lg transition-colors"
+              className="w-full py-2.5 text-xs font-bold text-[#285943] bg-white hover:bg-[#F0F5F0] border border-[#285943]/30 rounded-xl transition-colors cursor-pointer"
             >
-              View Full Sample Plan →
+              Explore Full Sample Plan →
             </button>
           </div>
         </div>
       </div>
 
-      {/* 3-Step Process Explanation */}
+      {/* 3-Step Process Highlights with Distinct Pastel Surfaces */}
       <div className="max-w-4xl mx-auto space-y-6">
-        <div className="text-center">
-          <h2 className="text-xl sm:text-2xl font-bold text-[#26352B]">
+        <div className="text-center space-y-1">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-[#26342D]">
             How SlothPlate works
           </h2>
-          <p className="text-xs sm:text-sm text-[#607266] mt-1">
+          <p className="text-xs sm:text-sm text-[#66746B]">
             From fridge photo to ready-to-cook in three peaceful steps.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-          {/* Step 1 */}
-          <div className="bg-white rounded-xl border border-[#E5E7DF] p-5 space-y-3 shadow-xs">
-            <div className="w-10 h-10 rounded-xl bg-[#DCE8D8] text-[#355E46] flex items-center justify-center font-bold text-sm">
+          {/* Step 1: Powder blue surface */}
+          <div className="bg-[#F2F8FA] rounded-2xl border border-[#BFDDE8] p-5 space-y-3.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-[#BFDDE8] text-[#285943] flex items-center justify-center font-extrabold text-sm shadow-2xs">
               1
             </div>
-            <h3 className="font-semibold text-base text-[#26352B]">
+            <h3 className="font-bold text-base text-[#26342D]">
               Scan or type ingredients
             </h3>
-            <p className="text-xs text-[#607266] leading-relaxed">
-              Snap up to 3 photos of your fridge or pantry, or type items manually. Open-weight Gemma identifies visible food and lets you verify it.
+            <p className="text-xs text-[#66746B] leading-relaxed">
+              Snap up to 3 photos of your fridge or pantry, or type items manually. Open-weight Gemma identifies visible food and lets you verify each estimate.
             </p>
           </div>
 
-          {/* Step 2 */}
-          <div className="bg-white rounded-xl border border-[#E5E7DF] p-5 space-y-3 shadow-xs">
-            <div className="w-10 h-10 rounded-xl bg-[#DCE8D8] text-[#355E46] flex items-center justify-center font-bold text-sm">
+          {/* Step 2: Butter yellow surface */}
+          <div className="bg-[#FEF9EB] rounded-2xl border border-[#F4CF77] p-5 space-y-3.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-[#F4CF77] text-[#26342D] flex items-center justify-center font-extrabold text-sm shadow-2xs">
               2
             </div>
-            <h3 className="font-semibold text-base text-[#26352B]">
+            <h3 className="font-bold text-base text-[#26342D]">
               Set effort & cleanup rules
             </h3>
-            <p className="text-xs text-[#607266] leading-relaxed">
-              Tell SlothPlate how many servings you need, your cooking time limit (10–30 mins), and your cleanup tolerance (like one-pan only).
+            <p className="text-xs text-[#66746B] leading-relaxed">
+              Tell SlothPlate how many servings you need, your cooking time ceiling (10–45 mins), and cleanup limits (such as one-pan only).
             </p>
           </div>
 
-          {/* Step 3 */}
-          <div className="bg-white rounded-xl border border-[#E5E7DF] p-5 space-y-3 shadow-xs">
-            <div className="w-10 h-10 rounded-xl bg-[#DCE8D8] text-[#355E46] flex items-center justify-center font-bold text-sm">
+          {/* Step 3: Lavender surface */}
+          <div className="bg-[#F7F5FC] rounded-2xl border border-[#D9CFF0] p-5 space-y-3.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-[#D9CFF0] text-[#285943] flex items-center justify-center font-extrabold text-sm shadow-2xs">
               3
             </div>
-            <h3 className="font-semibold text-base text-[#26352B]">
+            <h3 className="font-bold text-base text-[#26342D]">
               Cook & shop consolidated
             </h3>
-            <p className="text-xs text-[#607266] leading-relaxed">
-              Choose your favorite meals. Missing items are automatically combined into an organized, print-friendly grocery checklist.
+            <p className="text-xs text-[#66746B] leading-relaxed">
+              Pick your favorite recipes. Missing ingredients across all selected meals are automatically merged into an organized, print-friendly grocery checklist.
             </p>
           </div>
         </div>

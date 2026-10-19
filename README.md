@@ -17,9 +17,26 @@ SlothPlate re-engineers meal planning around **low effort and waste reduction**:
 3. **Overlapping ingredients**: Suggests meals that share fresh ingredients across recipes.
 4. **Deterministic grocery list**: Combines missing items across selected recipes without duplicate clutter or inaccurate math.
 
+## 2. Design System & 6-Color Palette
+
+SlothPlate features a warm, food-inspired visual system with purposeful color roles:
+- **Deep Forest Green** (`#285943`): Primary brand anchor, primary action CTAs, and active headers.
+- **Fresh Leaf Green** (`#78A878`): Confirmed ingredients, verified badges, and positive check states.
+- **Warm Butter Yellow** (`#F4CF77`): Featured recipe accents, tips, and portion adjusters.
+- **Soft Coral** (`#E98B70`): Secondary action highlights, excluded allergy tags, and items to buy.
+- **Powder Blue** (`#BFDDE8`): Information panels, photo upload drop zones, and time badges.
+- **Lavender** (`#D9CFF0`): Supporting surfaces, cookware tags, and recipe card variants.
+
+**Supporting Neutrals**:
+- Warm ivory base: `#FAF8F1`
+- Clean white surfaces: `#FFFFFF`
+- Deep slate text: `#26342D`
+- Muted secondary text: `#66746B`
+- Crisp borders: `#E8E6DC`
+
 ---
 
-## 2. Key Features
+## 3. Key Features
 
 - **Fridge & Pantry Scanner (Screen B)**:
   - Upload up to 3 fridge or pantry photos (JPEG, PNG, WebP; up to 5 MB per photo).

@@ -50,6 +50,9 @@ export function normalizeIngredientName(name: string): string {
   cleaned = cleaned.replace(/^(fresh|dried|chopped|diced|minced|grated|sliced|canned|organic)\s+/i, '');
   cleaned = cleaned.replace(/\s+(chopped|diced|minced|grated|sliced|to taste|for garnish)$/i, '');
   
+  // Strip common unit words attached to ingredient names like "garlic cloves" -> "garlic"
+  cleaned = cleaned.replace(/\s+(cloves|clove|stalks|stalk|pieces|piece|slices|slice|seeds|seed)$/i, '');
+
   // Singularization heuristics
   if (cleaned.endsWith('tomatoes')) cleaned = cleaned.replace(/tomatoes$/, 'tomato');
   else if (cleaned.endsWith('potatoes')) cleaned = cleaned.replace(/potatoes$/, 'potato');

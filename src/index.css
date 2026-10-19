@@ -2,27 +2,63 @@
 
 @layer base {
   :root {
-    --bg-ivory: #F7F6F0;
+    /* Primary 6-color palette */
+    --forest-green: #285943;
+    --forest-dark: #1E4332;
+    --leaf-green: #78A878;
+    --leaf-green-light: #F0F5F0;
+    --butter-yellow: #F4CF77;
+    --butter-yellow-light: #FEF9EB;
+    --soft-coral: #E98B70;
+    --soft-coral-light: #FDF3F0;
+    --powder-blue: #BFDDE8;
+    --powder-blue-light: #F2F8FA;
+    --lavender: #D9CFF0;
+    --lavender-light: #F7F5FC;
+
+    /* Supporting neutrals */
+    --bg-main: #FAF8F1;
     --surface-white: #FFFFFF;
-    --muted-sage: #DCE8D8;
-    --forest-green: #355E46;
-    --forest-dark: #23402F;
-    --text-primary: #26352B;
-    --text-muted: #607266;
-    --warm-peach: #EDAD85;
-    --warm-peach-light: #FBEFE8;
-    --border-neutral: #E5E7DF;
+    --text-primary: #26342D;
+    --text-secondary: #66746B;
+    --border-neutral: #E8E6DC;
   }
 
   body {
-    background-color: var(--bg-ivory);
+    background-color: var(--bg-main);
     color: var(--text-primary);
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
+}
 
-  .font-serif-accent {
-    font-family: 'Newsreader', Georgia, serif;
-  }
+/* Layered subtle background gradients */
+.bg-hero-gradient {
+  background: 
+    radial-gradient(ellipse 60% 45% at 85% 15%, rgba(120, 168, 120, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 20% 40%, rgba(244, 207, 119, 0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 35% at 50% 95%, rgba(191, 221, 232, 0.18) 0%, transparent 75%),
+    #FAF8F1;
+}
+
+.bg-scanner-gradient {
+  background:
+    radial-gradient(circle at 10% 20%, rgba(120, 168, 120, 0.10) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(191, 221, 232, 0.14) 0%, transparent 50%),
+    #FAF8F1;
+}
+
+.bg-meals-gradient {
+  background:
+    radial-gradient(circle at 20% 10%, rgba(244, 207, 119, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 60%, rgba(217, 207, 240, 0.12) 0%, transparent 50%),
+    #FAF8F1;
+}
+
+.bg-grocery-gradient {
+  background:
+    radial-gradient(circle at 90% 10%, rgba(120, 168, 120, 0.10) 0%, transparent 45%),
+    radial-gradient(circle at 15% 75%, rgba(191, 221, 232, 0.14) 0%, transparent 55%),
+    #FAF8F1;
 }
 
 @media print {
