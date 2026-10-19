@@ -13,7 +13,19 @@
     --text-primary: #24352F;
     --text-secondary: #586B63;
     --surface-white: #FFFFFF;
+    --surface-glass: rgba(255, 255, 255, 0.78);
     --border-neutral: #E4E8E2;
+    --card-shadow: 0 4px 20px -2px rgba(8, 126, 139, 0.08);
+  }
+
+  .dark {
+    --bg-main: #0B1613;
+    --text-primary: #E9F4F0;
+    --text-secondary: #97ADA4;
+    --surface-white: #13241F;
+    --surface-glass: rgba(19, 36, 31, 0.82);
+    --border-neutral: #223D35;
+    --card-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.4);
   }
 
   body {
@@ -22,113 +34,301 @@
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
     min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
 /* -------------------------------------------------------------
- * FLUID LIQUID WATER BACKGROUND ANIMATIONS (GPU Accelerated)
+ * VISIBLE, FLOWING LIQUID WATER ANIMATIONS (Continuous GPU Motion)
  * ----------------------------------------------------------- */
 
-/* Primary Flow: Aqua to Ocean Blue water swell */
-@keyframes water-flow-primary {
+/* Aqua & Turquoise Primary Liquid Swell: noticeable translation and rotation */
+@keyframes liquid-drift-aqua {
   0% {
-    transform: translate3d(-5%, -4%, 0) scale(1) rotate(0deg);
+    transform: translate3d(-18%, -12%, 0) rotate(0deg) scale(1);
   }
-  35% {
-    transform: translate3d(4%, 3%, 0) scale(1.08) rotate(3deg);
+  33% {
+    transform: translate3d(15%, 8%, 0) rotate(15deg) scale(1.18);
   }
-  70% {
-    transform: translate3d(-3%, 6%, 0) scale(0.96) rotate(-2deg);
+  66% {
+    transform: translate3d(-10%, 18%, 0) rotate(-12deg) scale(0.92);
   }
   100% {
-    transform: translate3d(5%, -5%, 0) scale(1.05) rotate(2deg);
+    transform: translate3d(20%, -15%, 0) rotate(25deg) scale(1.12);
   }
 }
 
-/* Secondary Flow: Deep Teal and Soft Sky Blue counter-current */
-@keyframes water-flow-secondary {
+/* Ocean Blue Undercurrent: opposite diagonal flowing motion */
+@keyframes liquid-drift-blue {
   0% {
-    transform: translate3d(6%, 4%, 0) scale(1.06) rotate(0deg);
+    transform: translate3d(16%, 15%, 0) rotate(0deg) scale(1.12);
   }
-  30% {
-    transform: translate3d(-4%, -5%, 0) scale(0.94) rotate(-4deg);
+  40% {
+    transform: translate3d(-14%, -18%, 0) rotate(-22deg) scale(0.88);
   }
-  65% {
-    transform: translate3d(3%, -2%, 0) scale(1.09) rotate(3deg);
+  75% {
+    transform: translate3d(10%, -8%, 0) rotate(18deg) scale(1.15);
   }
   100% {
-    transform: translate3d(-5%, 3%, 0) scale(1) rotate(-1deg);
+    transform: translate3d(-18%, 12%, 0) rotate(-15deg) scale(1);
   }
 }
 
-/* Sunlight Blooms: Warm Coral & Butter Yellow sunlight drifting through water */
-@keyframes sunlight-bloom-drift {
+/* Warm Coral & Butter Yellow Sunlight Blooms: visible warmth expansion and translation */
+@keyframes sunlight-bloom-flow {
   0% {
-    transform: translate3d(-3%, 2%, 0) scale(0.95);
-    opacity: 0.55;
-  }
-  45% {
-    transform: translate3d(4%, -4%, 0) scale(1.12);
-    opacity: 0.85;
-  }
-  80% {
-    transform: translate3d(-2%, 5%, 0) scale(1.02);
+    transform: translate3d(-12%, 10%, 0) scale(0.9);
     opacity: 0.65;
   }
+  35% {
+    transform: translate3d(18%, -15%, 0) scale(1.28);
+    opacity: 0.95;
+  }
+  70% {
+    transform: translate3d(-8%, -12%, 0) scale(1.05);
+    opacity: 0.72;
+  }
   100% {
-    transform: translate3d(-3%, 2%, 0) scale(0.95);
-    opacity: 0.55;
+    transform: translate3d(14%, 18%, 0) scale(1.22);
+    opacity: 0.9;
   }
 }
 
-/* Light Caustics / Ripple Shimmer Layer */
-@keyframes water-ripple-surface {
+/* Horizontal Flowing Wave 1 (Aqua / Turquoise Ribbon) */
+@keyframes wave-ribbon-horizontal-1 {
   0% {
-    transform: translate3d(0%, 0%, 0) scale(1);
-    opacity: 0.40;
+    transform: translate3d(-25%, 0, 0);
   }
   50% {
-    transform: translate3d(2%, 2%, 0) scale(1.04);
-    opacity: 0.70;
+    transform: translate3d(0%, 3%, 0);
   }
   100% {
-    transform: translate3d(-1%, -1%, 0) scale(0.98);
-    opacity: 0.40;
+    transform: translate3d(-25%, 0, 0);
   }
 }
 
-/* Animation utility classes with will-change for performance */
-.animate-water-primary {
-  animation: water-flow-primary 24s ease-in-out infinite alternate;
+/* Horizontal Flowing Wave 2 (Ocean Blue / Sky Blue Ribbon) */
+@keyframes wave-ribbon-horizontal-2 {
+  0% {
+    transform: translate3d(0%, 0, 0);
+  }
+  50% {
+    transform: translate3d(-25%, -3%, 0);
+  }
+  100% {
+    transform: translate3d(0%, 0, 0);
+  }
+}
+
+/* Sunlight Caustic Shimmer Ripples */
+@keyframes caustics-shimmer {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate3d(3%, -3%, 0) scale(1.06);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(-2%, 2%, 0) scale(0.96);
+    opacity: 0.45;
+  }
+}
+
+/* Playful Floating Elements (leaves, bubbles, mascots) */
+@keyframes float-gentle-1 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(-8px, -16px, 0) rotate(6deg);
+  }
+}
+
+@keyframes float-gentle-2 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(10px, -20px, 0) rotate(-8deg);
+  }
+}
+
+@keyframes bubble-rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.85);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(6px, -24px, 0) scale(1.08);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate3d(-4px, -48px, 0) scale(0.9);
+    opacity: 0.35;
+  }
+}
+
+/* CSS Classes for Animation Application */
+.animate-liquid-aqua {
+  animation: liquid-drift-aqua 16s ease-in-out infinite alternate;
   will-change: transform;
 }
 
-.animate-water-secondary {
-  animation: water-flow-secondary 30s ease-in-out infinite alternate;
+.animate-liquid-blue {
+  animation: liquid-drift-blue 20s ease-in-out infinite alternate;
   will-change: transform;
 }
 
-.animate-sunlight-blooms {
-  animation: sunlight-bloom-drift 20s ease-in-out infinite alternate;
+.animate-sunlight-warmth {
+  animation: sunlight-bloom-flow 14s ease-in-out infinite alternate;
   will-change: transform, opacity;
 }
 
-.animate-water-ripples {
-  animation: water-ripple-surface 16s ease-in-out infinite alternate;
+.animate-wave-ribbon-1 {
+  animation: wave-ribbon-horizontal-1 15s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-wave-ribbon-2 {
+  animation: wave-ribbon-horizontal-2 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-caustics {
+  animation: caustics-shimmer 12s ease-in-out infinite alternate;
   will-change: transform, opacity;
 }
 
-/* Accessibility: Respect user's motion preferences */
+.animate-float-1 {
+  animation: float-gentle-1 5s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: float-gentle-2 6.5s ease-in-out infinite;
+}
+
+.animate-bubble {
+  animation: bubble-rise 7s ease-in-out infinite alternate;
+}
+
+/* -------------------------------------------------------------
+ * SCROLL REVEAL UTILITIES (Triggered via IntersectionObserver)
+ * ----------------------------------------------------------- */
+.reveal-item {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-item.is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.reveal-horizontal-left {
+  opacity: 0;
+  transform: translate3d(-30px, 0, 0);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-horizontal-left.is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.reveal-horizontal-right {
+  opacity: 0;
+  transform: translate3d(30px, 0, 0);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-horizontal-right.is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Stagger utilities for lists and grids */
+.reveal-delay-1 { transition-delay: 60ms; }
+.reveal-delay-2 { transition-delay: 120ms; }
+.reveal-delay-3 { transition-delay: 180ms; }
+.reveal-delay-4 { transition-delay: 240ms; }
+
+/* -------------------------------------------------------------
+ * PLAYFUL INTERACTION STYLES
+ * ----------------------------------------------------------- */
+.btn-interactive {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-interactive:hover:not(:disabled) {
+  transform: translate3d(0, -2px, 0) scale(1.015);
+}
+
+.btn-interactive:active:not(:disabled) {
+  transform: translate3d(0, 1px, 0) scale(0.98);
+}
+
+.card-interactive {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.card-interactive:hover {
+  transform: translate3d(0, -3px, 0);
+}
+
+/* Drag / upload zone pulsing shimmer */
+@keyframes upload-pulse-glow {
+  0%, 100% {
+    border-color: rgba(69, 214, 199, 0.6);
+    box-shadow: 0 0 0 0 rgba(69, 214, 199, 0.2);
+  }
+  50% {
+    border-color: rgba(8, 126, 139, 0.9);
+    box-shadow: 0 0 16px 2px rgba(69, 214, 199, 0.35);
+  }
+}
+
+.upload-active-glow {
+  animation: upload-pulse-glow 2.5s infinite ease-in-out;
+}
+
+/* -------------------------------------------------------------
+ * ACCESSIBILITY & PRINT DISCIPLINE
+ * ----------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .animate-water-primary,
-  .animate-water-secondary,
-  .animate-sunlight-blooms,
-  .animate-water-ripples {
+  .animate-liquid-aqua,
+  .animate-liquid-blue,
+  .animate-sunlight-warmth,
+  .animate-wave-ribbon-1,
+  .animate-wave-ribbon-2,
+  .animate-caustics,
+  .animate-float-1,
+  .animate-float-2,
+  .animate-bubble,
+  .upload-active-glow {
     animation: none !important;
   }
+
+  .reveal-item,
+  .reveal-horizontal-left,
+  .reveal-horizontal-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .btn-interactive:hover,
+  .btn-interactive:active,
+  .card-interactive:hover {
+    transform: none !important;
+  }
 }
 
-/* Print optimizations: completely disable water backgrounds for clean printing */
 @media print {
   body {
     background: #FFFFFF !important;

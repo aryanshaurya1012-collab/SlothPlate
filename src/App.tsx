@@ -27,13 +27,40 @@ import {
   SAMPLE_PREFERENCES,
   SAMPLE_RECIPES,
 } from './utils/sampleData';
-import { AlertCircle, RefreshCw, Sparkles } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 export default function App() {
   // Navigation step state
   const [currentStep, setCurrentStep] = useState<
     'landing' | 'scanner' | 'preferences' | 'meals' | 'grocery'
   >('landing');
+
+  // Theme state with localStorage persistence
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('slothplate_theme');
+      if (saved) return saved === 'dark';
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('slothplate_theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('slothplate_theme', 'light');
+      }
+    } catch (e) {
+      console.warn('Theme storage unavailable', e);
+    }
+  }, [isDark]);
+
+  const toggleTheme = () => setIsDark((prev) => !prev);
 
   // Core application data state
   const [confirmedIngredients, setConfirmedIngredients] = useState<Ingredient[]>([]);
@@ -157,9 +184,7 @@ export default function App() {
     } catch (err: any) {
       console.error('Meal generation error:', err);
       setGenerationError({
-        message:
-          err.message ||
-          'The open-weight Gemma model inference service is temporarily unavailable.',
+        message: err.message || 'AI meal planning service is temporarily unavailable.',
         canUseSample: true,
       });
     } finally {
@@ -167,10 +192,8 @@ export default function App() {
     }
   };
 
-  // Recipe toggle selection
   const handleToggleRecipeSelect = (recipeId: string) => {
-    const isSelected = selectedRecipeIds.includes(recipeId);
-    const updatedIds = isSelected
+    const updatedIds = selectedRecipeIds.includes(recipeId)
       ? selectedRecipeIds.filter((id) => id !== recipeId)
       : [...selectedRecipeIds, recipeId];
 
@@ -179,22 +202,27 @@ export default function App() {
   };
 
   const handleExcludeRecipe = (recipeId: string) => {
-    const updatedRecipes = recipes.filter((r) => r.id !== recipeId);
-    setRecipes(updatedRecipes);
-    const updatedIds = selectedRecipeIds.filter((id) => id !== recipeId);
-    setSelectedRecipeIds(updatedIds);
-    rebuildGroceryList(updatedRecipes, updatedIds, confirmedIngredients, preferences.pantryStaples);
+    const remainingRecipes = recipes.filter((r) => r.id !== recipeId);
+    const updatedSelectedIds = selectedRecipeIds.filter((id) => id !== recipeId);
+
+    setRecipes(remainingRecipes);
+    setSelectedRecipeIds(updatedSelectedIds);
+    rebuildGroceryList(
+      remainingRecipes,
+      updatedSelectedIds,
+      confirmedIngredients,
+      preferences.pantryStaples
+    );
   };
 
-  // Save plan to localStorage
   const handleSaveCurrentPlan = () => {
-    const selectedMeals = recipes.filter((r) => selectedRecipeIds.includes(r.id));
+    const activeRecipes = recipes.filter((r) => selectedRecipeIds.includes(r.id));
     const title =
-      selectedMeals.length > 0
-        ? `${selectedMeals[0].title} + ${selectedMeals.length - 1} more`
-        : 'Weekly Low-Effort Meal Plan';
+      activeRecipes.length > 0
+        ? activeRecipes.map((r) => r.title).join(' & ')
+        : 'My SlothPlate Plan';
 
-    const saved = saveMealPlan({
+    saveMealPlan({
       title,
       confirmedIngredients,
       preferences,
@@ -233,11 +261,11 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative text-[#24352F] selection:bg-[#BCEBFA] selection:text-[#087E8B]">
-      {/* Animated Liquid Water Background */}
-      <WaterBackground subdued={currentStep !== 'landing'} />
+    <div className="min-h-screen flex flex-col relative text-[#24352F] dark:text-[#E9F4F0] selection:bg-[#BCEBFA] selection:text-[#087E8B] transition-colors duration-300">
+      {/* Real Animated Liquid Water Background with Parallax & Dark Mode */}
+      <WaterBackground subdued={currentStep !== 'landing'} isDark={isDark} />
 
-      {/* App Navigation Bar */}
+      {/* App Navigation Bar with Theme Toggle */}
       <Header
         onGoHome={() => setCurrentStep('landing')}
         onOpenSavedPlans={() => setIsSavedPlansModalOpen(true)}
@@ -245,18 +273,20 @@ export default function App() {
         onOpenQuality={() => setIsQualityModalOpen(true)}
         savedPlansCount={savedPlans.length}
         currentStep={currentStep}
+        isDark={isDark}
+        onToggleTheme={toggleTheme}
       />
 
-      {/* Main Content Viewport */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 relative z-10">
+      {/* Main Content Viewport with Step Transitions */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 relative z-10 transition-all duration-300">
         {/* Error Banner when generation fails */}
         {generationError && (
-          <div className="my-4 p-4 rounded-2xl bg-[#FDF3F0] border border-[#F28B78] text-[#24352F] text-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+          <div className="my-4 p-4 rounded-2xl bg-[#FDF3F0] dark:bg-[#2A1715] border border-[#F28B78] text-[#24352F] dark:text-[#E9F4F0] text-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
             <div className="flex items-start gap-2.5">
               <AlertCircle className="w-5 h-5 text-[#F28B78] shrink-0 mt-0.5" />
               <div>
                 <p className="font-bold">{generationError.message}</p>
-                <p className="text-xs text-[#586B63]">
+                <p className="text-xs text-[#586B63] dark:text-[#97ADA4]">
                   Your ingredients and preferences are safely preserved. You can retry with Gemma or explore the realistic sample plan.
                 </p>
               </div>
@@ -266,14 +296,14 @@ export default function App() {
               <button
                 onClick={() => handleGenerateMeals(preferences)}
                 disabled={isGeneratingMeals}
-                className="px-3.5 py-1.5 text-xs font-bold bg-white border border-[#E4E8E2] hover:border-[#087E8B]/60 rounded-xl transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 text-xs font-bold bg-white dark:bg-[#13241F] border border-[#E4E8E2] dark:border-[#223D35] hover:border-[#087E8B]/60 rounded-xl transition-colors cursor-pointer btn-interactive"
               >
                 Retry Request
               </button>
               {generationError.canUseSample && (
                 <button
                   onClick={handleTrySamplePlan}
-                  className="px-3.5 py-1.5 text-xs font-bold bg-[#087E8B] hover:bg-[#06626D] text-white rounded-xl transition-colors cursor-pointer shadow-2xs"
+                  className="px-3.5 py-1.5 text-xs font-bold bg-[#087E8B] hover:bg-[#06626D] text-white rounded-xl transition-colors cursor-pointer shadow-2xs btn-interactive"
                 >
                   Switch to Sample Plan
                 </button>
@@ -282,65 +312,67 @@ export default function App() {
           </div>
         )}
 
-        {/* Screen Routing */}
-        {currentStep === 'landing' && (
-          <LandingHero
-            onStartPlanning={handleStartPlanning}
-            onTrySamplePlan={handleTrySamplePlan}
-          />
-        )}
+        {/* Step Routing with Smooth View Transitions */}
+        <div key={currentStep} className="transition-all duration-300 ease-out">
+          {currentStep === 'landing' && (
+            <LandingHero
+              onStartPlanning={handleStartPlanning}
+              onTrySamplePlan={handleTrySamplePlan}
+            />
+          )}
 
-        {currentStep === 'scanner' && (
-          <IngredientScanner
-            initialIngredients={confirmedIngredients}
-            onConfirmIngredients={handleConfirmIngredients}
-            onBack={() => setCurrentStep('landing')}
-            onUseSampleIngredients={() => {
-              setConfirmedIngredients(SAMPLE_PANTRY_INGREDIENTS);
-            }}
-          />
-        )}
+          {currentStep === 'scanner' && (
+            <IngredientScanner
+              initialIngredients={confirmedIngredients}
+              onConfirmIngredients={handleConfirmIngredients}
+              onBack={() => setCurrentStep('landing')}
+              onUseSampleIngredients={() => {
+                setConfirmedIngredients(SAMPLE_PANTRY_INGREDIENTS);
+              }}
+            />
+          )}
 
-        {currentStep === 'preferences' && (
-          <PreferenceForm
-            initialPreferences={preferences}
-            onGenerateMeals={handleGenerateMeals}
-            onBack={() => setCurrentStep('scanner')}
-            isGenerating={isGeneratingMeals}
-          />
-        )}
+          {currentStep === 'preferences' && (
+            <PreferenceForm
+              initialPreferences={preferences}
+              onGenerateMeals={handleGenerateMeals}
+              onBack={() => setCurrentStep('scanner')}
+              isGenerating={isGeneratingMeals}
+            />
+          )}
 
-        {currentStep === 'meals' && (
-          <MealSelection
-            recipes={recipes}
-            selectedRecipeIds={selectedRecipeIds}
-            onToggleSelect={handleToggleRecipeSelect}
-            onExcludeRecipe={handleExcludeRecipe}
-            onRegenerate={() => handleGenerateMeals(preferences)}
-            onBackToIngredients={() => setCurrentStep('scanner')}
-            onProceedToGrocery={() => setCurrentStep('grocery')}
-            isRegenerating={isGeneratingMeals}
-            isSampleMode={isSampleMode}
-          />
-        )}
+          {currentStep === 'meals' && (
+            <MealSelection
+              recipes={recipes}
+              selectedRecipeIds={selectedRecipeIds}
+              onToggleSelect={handleToggleRecipeSelect}
+              onExcludeRecipe={handleExcludeRecipe}
+              onRegenerate={() => handleGenerateMeals(preferences)}
+              onBackToIngredients={() => setCurrentStep('scanner')}
+              onProceedToGrocery={() => setCurrentStep('grocery')}
+              isRegenerating={isGeneratingMeals}
+              isSampleMode={isSampleMode}
+            />
+          )}
 
-        {currentStep === 'grocery' && (
-          <GroceryListScreen
-            groceryList={groceryList}
-            selectedRecipes={recipes.filter((r) => selectedRecipeIds.includes(r.id))}
-            onUpdateGroceryList={(newList) => setGroceryList(newList)}
-            onSavePlan={handleSaveCurrentPlan}
-            onBackToMeals={() => setCurrentStep('meals')}
-            isSaved={isCurrentPlanSaved}
-          />
-        )}
+          {currentStep === 'grocery' && (
+            <GroceryListScreen
+              groceryList={groceryList}
+              selectedRecipes={recipes.filter((r) => selectedRecipeIds.includes(r.id))}
+              onUpdateGroceryList={(newList) => setGroceryList(newList)}
+              onSavePlan={handleSaveCurrentPlan}
+              onBackToMeals={() => setCurrentStep('meals')}
+              isSaved={isCurrentPlanSaved}
+            />
+          )}
+        </div>
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-[#E4E8E2] bg-[#FAF8F1]/85 backdrop-blur-md py-8 no-print">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#586B63]">
+      <footer className="mt-auto border-t border-[#E4E8E2] dark:border-[#223D35] bg-[#FAF8F1]/85 dark:bg-[#0B1613]/85 backdrop-blur-md py-8 transition-colors duration-300 no-print">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#586B63] dark:text-[#97ADA4]">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-[#24352F]">SlothPlate</span>
+            <span className="font-bold text-[#24352F] dark:text-[#E9F4F0]">SlothPlate</span>
             <span>•</span>
             <span>Hacktoberfest 2026 Open-Source AI Challenge (Week 3: Slow and Steady)</span>
           </div>
@@ -348,19 +380,19 @@ export default function App() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsPrivacyModalOpen(true)}
-              className="hover:text-[#087E8B] transition-colors cursor-pointer"
+              className="hover:text-[#087E8B] dark:hover:text-[#45D6C7] transition-colors cursor-pointer"
             >
               Open AI & Privacy
             </button>
             <button
               onClick={() => setIsQualityModalOpen(true)}
-              className="hover:text-[#087E8B] transition-colors cursor-pointer"
+              className="hover:text-[#087E8B] dark:hover:text-[#45D6C7] transition-colors cursor-pointer"
             >
               Quality & Tests
             </button>
             <button
               onClick={() => setIsSavedPlansModalOpen(true)}
-              className="hover:text-[#087E8B] transition-colors cursor-pointer"
+              className="hover:text-[#087E8B] dark:hover:text-[#45D6C7] transition-colors cursor-pointer"
             >
               Saved Plans ({savedPlans.length})
             </button>

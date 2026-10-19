@@ -33,35 +33,35 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
-      <div className="bg-white w-full max-w-2xl rounded-2xl border border-[#E4E8E2] shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
+      <div className="bg-white dark:bg-[#13241F] w-full max-w-2xl rounded-2xl border border-[#E4E8E2] dark:border-[#223D35] shadow-xl overflow-hidden flex flex-col max-h-[90vh] transition-colors duration-300">
         {/* Modal Header */}
-        <div className="p-5 sm:p-6 border-b border-[#E4E8E2] flex items-start justify-between gap-4 bg-[#FAF8F1]">
+        <div className="p-5 sm:p-6 border-b border-[#E4E8E2] dark:border-[#223D35] flex items-start justify-between gap-4 bg-[#FAF8F1] dark:bg-[#1A3029]">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#BCEBFA]/40 text-[#087E8B] border border-[#45D6C7]/40">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#BCEBFA]/40 dark:bg-[#45D6C7]/20 text-[#087E8B] dark:text-[#45D6C7] border border-[#45D6C7]/40">
                 {recipe.effortLevel}
               </span>
-              <span className="text-xs font-medium text-[#586B63] flex items-center gap-1 bg-white px-2 py-0.5 rounded-md border border-[#E4E8E2]">
-                <Clock className="w-3.5 h-3.5 text-[#087E8B]" />
+              <span className="text-xs font-medium text-[#586B63] dark:text-[#97ADA4] flex items-center gap-1 bg-white dark:bg-[#13241F] px-2 py-0.5 rounded-md border border-[#E4E8E2] dark:border-[#223D35]">
+                <Clock className="w-3.5 h-3.5 text-[#087E8B] dark:text-[#45D6C7]" />
                 {recipe.totalTimeMinutes} mins total
               </span>
-              <span className="text-xs font-medium text-[#586B63] flex items-center gap-1 bg-white px-2 py-0.5 rounded-md border border-[#E4E8E2]">
-                <Utensils className="w-3.5 h-3.5 text-[#087E8B]" />
+              <span className="text-xs font-medium text-[#586B63] dark:text-[#97ADA4] flex items-center gap-1 bg-white dark:bg-[#13241F] px-2 py-0.5 rounded-md border border-[#E4E8E2] dark:border-[#223D35]">
+                <Utensils className="w-3.5 h-3.5 text-[#087E8B] dark:text-[#45D6C7]" />
                 {recipe.dishCount} {recipe.dishCount === 1 ? 'pan/dish' : 'dishes'}
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-[#24352F] tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-[#24352F] dark:text-[#E9F4F0] tracking-tight">
               {recipe.title}
             </h2>
-            <p className="text-xs sm:text-sm text-[#586B63] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#586B63] dark:text-[#97ADA4] leading-relaxed">
               {recipe.description}
             </p>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-[#586B63] hover:text-[#24352F] hover:bg-white transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-[#586B63] dark:text-[#97ADA4] hover:text-[#24352F] dark:hover:text-white hover:bg-white dark:hover:bg-[#13241F] transition-colors cursor-pointer btn-interactive"
             title="Close recipe"
           >
             <X className="w-5 h-5" />
@@ -71,29 +71,29 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
         {/* Modal Content Scrollable Area */}
         <div className="p-5 sm:p-6 overflow-y-auto space-y-6 text-sm">
           {/* Servings Adjuster */}
-          <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#FEF9EB] border border-[#F5D778]">
+          <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#FEF9EB] dark:bg-[#F5D778]/10 border border-[#F5D778] dark:border-[#F5D778]/30">
             <div>
-              <span className="font-bold text-xs text-[#24352F] uppercase tracking-wider block">
+              <span className="font-bold text-xs text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider block">
                 Portion Size
               </span>
-              <span className="text-xs text-[#586B63]">
+              <span className="text-xs text-[#586B63] dark:text-[#97ADA4]">
                 Adjust servings (quantities update dynamically below)
               </span>
             </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setCurrentServings((s) => Math.max(1, s - 1))}
-                className="w-8 h-8 rounded-lg bg-white border border-[#E4E8E2] flex items-center justify-center text-[#24352F] hover:bg-[#FAF8F1] transition-colors cursor-pointer shadow-2xs font-bold"
+                className="w-8 h-8 rounded-lg bg-white dark:bg-[#1A3029] border border-[#E4E8E2] dark:border-[#223D35] flex items-center justify-center text-[#24352F] dark:text-[#E9F4F0] hover:bg-[#FAF8F1] transition-colors cursor-pointer shadow-2xs font-bold btn-interactive"
                 title="Decrease servings"
               >
                 <Minus className="w-3.5 h-3.5" />
               </button>
-              <span className="font-extrabold text-sm text-[#24352F] w-14 text-center">
+              <span className="font-extrabold text-sm text-[#24352F] dark:text-[#E9F4F0] w-14 text-center">
                 {currentServings} {currentServings === 1 ? 'serving' : 'servings'}
               </span>
               <button
                 onClick={() => setCurrentServings((s) => Math.min(12, s + 1))}
-                className="w-8 h-8 rounded-lg bg-white border border-[#E4E8E2] flex items-center justify-center text-[#24352F] hover:bg-[#FAF8F1] transition-colors cursor-pointer shadow-2xs font-bold"
+                className="w-8 h-8 rounded-lg bg-white dark:bg-[#1A3029] border border-[#E4E8E2] dark:border-[#223D35] flex items-center justify-center text-[#24352F] dark:text-[#E9F4F0] hover:bg-[#FAF8F1] transition-colors cursor-pointer shadow-2xs font-bold btn-interactive"
                 title="Increase servings"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -103,8 +103,8 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
 
           {/* Ingredients Section */}
           <div className="space-y-3">
-            <h3 className="font-extrabold text-base text-[#24352F] flex items-center gap-2">
-              <ChefHat className="w-4 h-4 text-[#087E8B]" />
+            <h3 className="font-extrabold text-base text-[#24352F] dark:text-[#E9F4F0] flex items-center gap-2">
+              <ChefHat className="w-4 h-4 text-[#087E8B] dark:text-[#45D6C7]" />
               Ingredients Needed
             </h3>
 
@@ -114,8 +114,8 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
                   key={idx}
                   className={`p-3 rounded-xl border text-xs flex items-center justify-between gap-2 transition-all ${
                     ing.isAvailable
-                      ? 'bg-[#BCEBFA]/20 border-[#45D6C7]/50'
-                      : 'bg-[#FDF3F0] border-[#F28B78]/50'
+                      ? 'bg-[#BCEBFA]/20 dark:bg-[#45D6C7]/10 border-[#45D6C7]/50'
+                      : 'bg-[#FDF3F0] dark:bg-[#F28B78]/15 border-[#F28B78]/50'
                   }`}
                 >
                   <div className="flex items-center gap-2 truncate">
@@ -124,13 +124,13 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
                         ing.isAvailable ? 'bg-[#45D6C7]' : 'bg-[#F28B78]'
                       }`}
                     />
-                    <span className="font-bold text-[#24352F] truncate">
+                    <span className="font-bold text-[#24352F] dark:text-[#E9F4F0] truncate">
                       {ing.name}
                     </span>
                   </div>
 
                   <div className="text-right shrink-0">
-                    <span className="font-bold text-[#24352F]">
+                    <span className="font-bold text-[#24352F] dark:text-[#E9F4F0]">
                       {adjustQuantity(ing.quantity)}
                     </span>
                     {!ing.isAvailable && (
@@ -146,16 +146,16 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
 
           {/* Step-by-Step Instructions */}
           <div className="space-y-3">
-            <h3 className="font-extrabold text-base text-[#24352F]">
+            <h3 className="font-extrabold text-base text-[#24352F] dark:text-[#E9F4F0]">
               Step-by-Step Instructions
             </h3>
-            <ol className="space-y-3 text-xs sm:text-sm text-[#24352F]">
+            <ol className="space-y-3 text-xs sm:text-sm text-[#24352F] dark:text-[#E9F4F0]">
               {recipe.steps.map((step, idx) => (
                 <li
                   key={idx}
-                  className="flex items-start gap-3 p-3.5 rounded-xl bg-[#FAF8F1] border border-[#E4E8E2]"
+                  className="flex items-start gap-3 p-3.5 rounded-xl bg-[#FAF8F1] dark:bg-[#1A3029] border border-[#E4E8E2] dark:border-[#223D35]"
                 >
-                  <span className="w-6 h-6 rounded-lg bg-[#BCEBFA] text-[#087E8B] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                  <span className="w-6 h-6 rounded-lg bg-[#BCEBFA] dark:bg-[#45D6C7]/20 text-[#087E8B] dark:text-[#45D6C7] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
                     {idx + 1}
                   </span>
                   <span className="leading-relaxed">{step}</span>
@@ -167,11 +167,11 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
           {/* Equipment & Substitutions */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             {recipe.equipment.length > 0 && (
-              <div className="p-4 rounded-xl bg-[#FAF8F1] border border-[#BCEBFA] space-y-1.5">
-                <span className="font-bold text-[#24352F] uppercase tracking-wider block">
+              <div className="p-4 rounded-xl bg-[#FAF8F1] dark:bg-[#1A3029] border border-[#BCEBFA] dark:border-[#223D35] space-y-1.5">
+                <span className="font-bold text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider block">
                   Equipment Needed
                 </span>
-                <ul className="list-disc list-inside text-[#586B63] space-y-1">
+                <ul className="list-disc list-inside text-[#586B63] dark:text-[#97ADA4] space-y-1">
                   {recipe.equipment.map((eq, i) => (
                     <li key={i}>{eq}</li>
                   ))}
@@ -180,11 +180,11 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
             )}
 
             {recipe.substitutions.length > 0 && (
-              <div className="p-4 rounded-xl bg-[#FAF8F1] border border-[#E4E8E2] space-y-1.5">
-                <span className="font-bold text-[#24352F] uppercase tracking-wider block">
+              <div className="p-4 rounded-xl bg-[#FAF8F1] dark:bg-[#1A3029] border border-[#E4E8E2] dark:border-[#223D35] space-y-1.5">
+                <span className="font-bold text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider block">
                   Plausible Substitutions
                 </span>
-                <ul className="list-disc list-inside text-[#586B63] space-y-1">
+                <ul className="list-disc list-inside text-[#586B63] dark:text-[#97ADA4] space-y-1">
                   {recipe.substitutions.map((sub, i) => (
                     <li key={i}>{sub}</li>
                   ))}
@@ -195,11 +195,11 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
 
           {/* Leftover Suggestion */}
           {recipe.leftoverSuggestion && (
-            <div className="p-4 rounded-xl bg-[#BCEBFA]/20 border border-[#45D6C7]/50 text-xs text-[#24352F] space-y-1">
-              <span className="font-bold text-[#087E8B] uppercase tracking-wider block">
+            <div className="p-4 rounded-xl bg-[#BCEBFA]/20 dark:bg-[#45D6C7]/15 border border-[#45D6C7]/50 text-xs text-[#24352F] dark:text-[#E9F4F0] space-y-1">
+              <span className="font-bold text-[#087E8B] dark:text-[#45D6C7] uppercase tracking-wider block">
                 Leftover & Repurpose Idea
               </span>
-              <p className="leading-relaxed text-[#24352F]">
+              <p className="leading-relaxed text-[#24352F] dark:text-[#E9F4F0]">
                 {recipe.leftoverSuggestion}
               </p>
             </div>
@@ -207,20 +207,20 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 sm:p-5 border-t border-[#E4E8E2] bg-[#FAF8F1] flex items-center justify-between gap-3">
+        <div className="p-4 sm:p-5 border-t border-[#E4E8E2] dark:border-[#223D35] bg-[#FAF8F1] dark:bg-[#1A3029] flex items-center justify-between gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-[#586B63] hover:text-[#24352F] transition-colors cursor-pointer"
+            className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-[#586B63] dark:text-[#97ADA4] hover:text-[#24352F] dark:hover:text-white transition-colors cursor-pointer"
           >
             Close
           </button>
 
           <button
             onClick={() => onToggleSelect(recipe.id)}
-            className={`px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer shadow-xs ${
+            className={`px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer shadow-xs btn-interactive ${
               isSelected
                 ? 'bg-[#087E8B] text-white hover:bg-[#06626D]'
-                : 'bg-white text-[#24352F] border border-[#E4E8E2] hover:border-[#087E8B]'
+                : 'bg-white dark:bg-[#13241F] text-[#24352F] dark:text-[#E9F4F0] border border-[#E4E8E2] dark:border-[#223D35] hover:border-[#087E8B]'
             }`}
           >
             <CheckCircle2 className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-[#45D6C7]'}`} />

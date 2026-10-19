@@ -16,45 +16,45 @@ const CATEGORIES_CONFIG: Record<
   { badgeBg: string; text: string; border: string; dot: string }
 > = {
   Produce: {
-    badgeBg: 'bg-[#BCEBFA]/30',
-    text: 'text-[#087E8B]',
+    badgeBg: 'bg-[#BCEBFA]/30 dark:bg-[#45D6C7]/15',
+    text: 'text-[#087E8B] dark:text-[#45D6C7]',
     border: 'border-[#45D6C7]/50',
     dot: 'bg-[#45D6C7]',
   },
   'Dairy & Eggs': {
-    badgeBg: 'bg-[#FEF9EB]',
-    text: 'text-[#24352F]',
+    badgeBg: 'bg-[#FEF9EB] dark:bg-[#F5D778]/15',
+    text: 'text-[#24352F] dark:text-[#F5D778]',
     border: 'border-[#F5D778]',
     dot: 'bg-[#F5D778]',
   },
   'Bakery & Grains': {
-    badgeBg: 'bg-[#FAF8F1]',
-    text: 'text-[#087E8B]',
-    border: 'border-[#BCEBFA]',
+    badgeBg: 'bg-[#FAF8F1] dark:bg-[#4F8FE8]/15',
+    text: 'text-[#087E8B] dark:text-[#4F8FE8]',
+    border: 'border-[#BCEBFA] dark:border-[#4F8FE8]/40',
     dot: 'bg-[#4F8FE8]',
   },
   Proteins: {
-    badgeBg: 'bg-[#FDF3F0]',
+    badgeBg: 'bg-[#FDF3F0] dark:bg-[#F28B78]/15',
     text: 'text-[#F28B78]',
     border: 'border-[#F28B78]/50',
     dot: 'bg-[#F28B78]',
   },
   'Pantry & Spices': {
-    badgeBg: 'bg-[#FAF8F1]',
-    text: 'text-[#24352F]',
-    border: 'border-[#E4E8E2]',
+    badgeBg: 'bg-[#FAF8F1] dark:bg-[#1A3029]',
+    text: 'text-[#24352F] dark:text-[#E9F4F0]',
+    border: 'border-[#E4E8E2] dark:border-[#223D35]',
     dot: 'bg-[#087E8B]',
   },
   'Beverages & Condiments': {
-    badgeBg: 'bg-[#BCEBFA]/20',
-    text: 'text-[#087E8B]',
-    border: 'border-[#BCEBFA]',
+    badgeBg: 'bg-[#BCEBFA]/20 dark:bg-[#45D6C7]/10',
+    text: 'text-[#087E8B] dark:text-[#45D6C7]',
+    border: 'border-[#BCEBFA] dark:border-[#45D6C7]/30',
     dot: 'bg-[#45D6C7]',
   },
   Other: {
-    badgeBg: 'bg-[#FAF8F1]',
-    text: 'text-[#24352F]',
-    border: 'border-[#E4E8E2]',
+    badgeBg: 'bg-[#FAF8F1] dark:bg-[#1A3029]',
+    text: 'text-[#24352F] dark:text-[#E9F4F0]',
+    border: 'border-[#E4E8E2] dark:border-[#223D35]',
     dot: 'bg-[#586B63]',
   },
 };
@@ -169,15 +169,15 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
       </div>
 
       {/* Screen Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E4E8E2] pb-4 no-print">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E4E8E2] dark:border-[#223D35] pb-4 no-print">
         <div>
-          <span className="text-xs font-bold text-[#087E8B] uppercase tracking-wider">
+          <span className="text-xs font-bold text-[#087E8B] dark:text-[#45D6C7] uppercase tracking-wider">
             Consolidated Plan
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#24352F] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#24352F] dark:text-[#E9F4F0] tracking-tight">
             Smart Grocery List
           </h2>
-          <p className="text-xs sm:text-sm text-[#586B63] mt-1">
+          <p className="text-xs sm:text-sm text-[#586B63] dark:text-[#97ADA4] mt-1">
             Merged across {selectedRecipes.length} meal{selectedRecipes.length > 1 ? 's' : ''}. Quantities with matching units are automatically summed.
           </p>
         </div>
@@ -186,7 +186,7 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={onBackToMeals}
-            className="text-xs sm:text-sm font-semibold text-[#586B63] hover:text-[#24352F] px-3 py-1.5 rounded-xl hover:bg-[#E4E8E2]/40 transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="text-xs sm:text-sm font-semibold text-[#586B63] dark:text-[#97ADA4] hover:text-[#24352F] dark:hover:text-white px-3 py-1.5 rounded-xl hover:bg-[#E4E8E2]/40 dark:hover:bg-[#1E352F] transition-colors flex items-center gap-1.5 cursor-pointer btn-interactive"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Change Meals</span>
@@ -194,25 +194,25 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
 
           <button
             onClick={copyAsPlainText}
-            className="px-3.5 py-1.5 text-xs sm:text-sm font-bold text-[#24352F] bg-white border border-[#E4E8E2] hover:border-[#087E8B]/50 rounded-xl shadow-2xs hover:bg-[#FAF8F1] transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-1.5 text-xs sm:text-sm font-bold text-[#24352F] dark:text-[#E9F4F0] bg-white dark:bg-[#13241F] border border-[#E4E8E2] dark:border-[#223D35] hover:border-[#087E8B]/50 rounded-xl shadow-2xs hover:bg-[#FAF8F1] dark:hover:bg-[#1A3029] transition-colors flex items-center gap-1.5 cursor-pointer btn-interactive"
           >
-            <Copy className="w-3.5 h-3.5 text-[#087E8B]" />
+            <Copy className="w-3.5 h-3.5 text-[#087E8B] dark:text-[#45D6C7]" />
             <span>{copiedToast ? 'Copied!' : 'Copy Text'}</span>
           </button>
 
           <button
             onClick={handlePrint}
-            className="px-3.5 py-1.5 text-xs sm:text-sm font-bold text-[#24352F] bg-white border border-[#E4E8E2] hover:border-[#087E8B]/50 rounded-xl shadow-2xs hover:bg-[#FAF8F1] transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-1.5 text-xs sm:text-sm font-bold text-[#24352F] dark:text-[#E9F4F0] bg-white dark:bg-[#13241F] border border-[#E4E8E2] dark:border-[#223D35] hover:border-[#087E8B]/50 rounded-xl shadow-2xs hover:bg-[#FAF8F1] dark:hover:bg-[#1A3029] transition-colors flex items-center gap-1.5 cursor-pointer btn-interactive"
           >
-            <Printer className="w-3.5 h-3.5 text-[#087E8B]" />
+            <Printer className="w-3.5 h-3.5 text-[#087E8B] dark:text-[#45D6C7]" />
             <span>Print List</span>
           </button>
 
           <button
             onClick={onSavePlan}
-            className={`px-4 py-2 text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer ${
+            className={`px-4 py-2 text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer btn-interactive ${
               isSaved
-                ? 'bg-[#BCEBFA]/30 text-[#087E8B] border border-[#45D6C7]'
+                ? 'bg-[#BCEBFA]/30 dark:bg-[#45D6C7]/20 text-[#087E8B] dark:text-[#45D6C7] border border-[#45D6C7]'
                 : 'bg-[#087E8B] hover:bg-[#06626D] text-white hover:shadow-md'
             }`}
           >
@@ -223,20 +223,20 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
       </div>
 
       {/* Selected Meals Summary Cards */}
-      <div className="bg-white rounded-2xl border border-[#E4E8E2] p-5 space-y-3.5 shadow-xs no-print">
-        <h3 className="font-extrabold text-xs text-[#24352F] uppercase tracking-wider">
+      <div className="bg-white dark:bg-[#13241F] rounded-2xl border border-[#E4E8E2] dark:border-[#223D35] p-5 space-y-3.5 shadow-xs no-print">
+        <h3 className="font-extrabold text-xs text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider">
           Included Meals in this list:
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {selectedRecipes.map((recipe) => (
             <div
               key={recipe.id}
-              className="p-3.5 rounded-xl bg-[#FAF8F1] border border-[#E4E8E2] space-y-1"
+              className="p-3.5 rounded-xl bg-[#FAF8F1] dark:bg-[#1A3029] border border-[#E4E8E2] dark:border-[#223D35] space-y-1 card-interactive"
             >
-              <h4 className="font-bold text-xs sm:text-sm text-[#24352F] leading-tight">
+              <h4 className="font-bold text-xs sm:text-sm text-[#24352F] dark:text-[#E9F4F0] leading-tight">
                 {recipe.title}
               </h4>
-              <div className="text-[11px] text-[#586B63] flex items-center gap-2">
+              <div className="text-[11px] text-[#586B63] dark:text-[#97ADA4] flex items-center gap-2">
                 <span>{recipe.totalTimeMinutes}m total</span>
                 <span>•</span>
                 <span>{recipe.dishCount} dish</span>
@@ -246,18 +246,18 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
         </div>
       </div>
 
-      {/* Shopping Progress Bar */}
+      {/* Shopping Progress Bar with animated fill */}
       {itemsToBuy.length > 0 && (
-        <div className="bg-[#FAF8F1] border border-[#BCEBFA] rounded-2xl p-4 flex items-center justify-between text-xs text-[#24352F] shadow-2xs no-print">
+        <div className="bg-[#FAF8F1] dark:bg-[#1A3029] border border-[#BCEBFA] dark:border-[#223D35] rounded-2xl p-4 flex items-center justify-between text-xs text-[#24352F] dark:text-[#E9F4F0] shadow-2xs no-print">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-[#087E8B]" />
+            <CheckCircle2 className="w-4 h-4 text-[#087E8B] dark:text-[#45D6C7]" />
             <span>
               <strong>Shopping Progress:</strong> {checkedCount} of {itemsToBuy.length} items collected
             </span>
           </div>
-          <div className="w-28 sm:w-44 bg-white h-2.5 rounded-full overflow-hidden border border-[#BCEBFA]">
+          <div className="w-28 sm:w-44 bg-white dark:bg-[#13241F] h-2.5 rounded-full overflow-hidden border border-[#BCEBFA] dark:border-[#223D35]">
             <div
-              className="bg-[#087E8B] h-full transition-all"
+              className="bg-[#087E8B] dark:bg-[#45D6C7] h-full transition-all duration-300"
               style={{
                 width: `${itemsToBuy.length > 0 ? (checkedCount / itemsToBuy.length) * 100 : 0}%`,
               }}
@@ -267,8 +267,8 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
       )}
 
       {/* Add Custom Item Input Form */}
-      <div className="bg-white rounded-2xl border border-[#E4E8E2] p-5 space-y-3 shadow-xs no-print">
-        <span className="text-xs font-bold text-[#24352F] uppercase tracking-wider block">
+      <div className="bg-white dark:bg-[#13241F] rounded-2xl border border-[#E4E8E2] dark:border-[#223D35] p-5 space-y-3 shadow-xs no-print">
+        <span className="text-xs font-bold text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider block">
           Add an extra grocery item
         </span>
 
@@ -278,19 +278,19 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
             value={newItemName}
             onChange={(e) => setNewItemName(e.target.value)}
             placeholder="Item name (e.g. Oat milk, Lemons)"
-            className="sm:col-span-5 text-xs px-3.5 py-2.5 rounded-xl border border-[#E4E8E2] focus:outline-none focus:border-[#087E8B]"
+            className="sm:col-span-5 text-xs px-3.5 py-2.5 rounded-xl border border-[#E4E8E2] dark:border-[#223D35] bg-white dark:bg-[#1A3029] text-[#24352F] dark:text-[#E9F4F0] focus:outline-none focus:border-[#087E8B]"
           />
           <input
             type="text"
             value={newItemQty}
             onChange={(e) => setNewItemQty(e.target.value)}
             placeholder="Qty (e.g. 1 carton, 3 pcs)"
-            className="sm:col-span-3 text-xs px-3.5 py-2.5 rounded-xl border border-[#E4E8E2] focus:outline-none focus:border-[#087E8B]"
+            className="sm:col-span-3 text-xs px-3.5 py-2.5 rounded-xl border border-[#E4E8E2] dark:border-[#223D35] bg-white dark:bg-[#1A3029] text-[#24352F] dark:text-[#E9F4F0] focus:outline-none focus:border-[#087E8B]"
           />
           <select
             value={newItemCategory}
             onChange={(e) => setNewItemCategory(e.target.value as IngredientCategory)}
-            className="sm:col-span-2 text-xs px-3 py-2.5 rounded-xl border border-[#E4E8E2] focus:outline-none focus:border-[#087E8B] bg-white cursor-pointer"
+            className="sm:col-span-2 text-xs px-3 py-2.5 rounded-xl border border-[#E4E8E2] dark:border-[#223D35] bg-white dark:bg-[#1A3029] text-[#24352F] dark:text-[#E9F4F0] focus:outline-none focus:border-[#087E8B] cursor-pointer"
           >
             {CATEGORIES_ORDER.map((cat) => (
               <option key={cat} value={cat}>
@@ -300,7 +300,7 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
           </select>
           <button
             type="submit"
-            className="sm:col-span-2 py-2.5 bg-[#087E8B] hover:bg-[#06626D] text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1 transition-colors cursor-pointer shadow-2xs"
+            className="sm:col-span-2 py-2.5 bg-[#087E8B] hover:bg-[#06626D] text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1 transition-colors cursor-pointer shadow-2xs btn-interactive"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Item</span>
@@ -311,12 +311,12 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
       {/* Grouped Grocery Items List */}
       <div className="space-y-6">
         {itemsToBuy.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-[#E4E8E2] p-10 text-center space-y-2 shadow-xs">
+          <div className="bg-white dark:bg-[#13241F] rounded-2xl border border-[#E4E8E2] dark:border-[#223D35] p-10 text-center space-y-2 shadow-xs">
             <CheckCircle2 className="w-10 h-10 text-[#45D6C7] mx-auto" />
-            <h3 className="font-extrabold text-base text-[#24352F]">
+            <h3 className="font-extrabold text-base text-[#24352F] dark:text-[#E9F4F0]">
               Your fridge already has everything needed!
             </h3>
-            <p className="text-xs text-[#586B63]">
+            <p className="text-xs text-[#586B63] dark:text-[#97ADA4]">
               All ingredients for your selected meals are confirmed available. Zero grocery shopping run needed.
             </p>
           </div>
@@ -329,12 +329,12 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
             return (
               <div
                 key={category}
-                className="bg-white rounded-2xl border border-[#E4E8E2] p-5 sm:p-6 space-y-3.5 shadow-xs"
+                className="bg-white dark:bg-[#13241F] rounded-2xl border border-[#E4E8E2] dark:border-[#223D35] p-5 sm:p-6 space-y-3.5 shadow-xs transition-colors duration-300"
               >
-                <div className="flex items-center justify-between border-b border-[#E4E8E2] pb-2.5">
+                <div className="flex items-center justify-between border-b border-[#E4E8E2] dark:border-[#223D35] pb-2.5">
                   <div className="flex items-center gap-2">
                     <span className={`w-2.5 h-2.5 rounded-full ${config.dot}`} />
-                    <h3 className="font-extrabold text-sm text-[#24352F] tracking-tight">
+                    <h3 className="font-extrabold text-sm text-[#24352F] dark:text-[#E9F4F0] tracking-tight">
                       {category}
                     </h3>
                   </div>
@@ -347,10 +347,10 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
                   {items.map((item) => (
                     <div
                       key={item.id}
-                      className={`p-3 rounded-xl border transition-all flex items-center justify-between gap-3 ${
+                      className={`p-3 rounded-xl border transition-all duration-300 flex items-center justify-between gap-3 ${
                         item.isChecked
-                          ? 'bg-[#FAF8F1] border-transparent text-[#586B63] line-through'
-                          : 'bg-white border-[#E4E8E2] text-[#24352F] hover:border-[#BCEBFA]'
+                          ? 'bg-[#FAF8F1] dark:bg-[#1A3029]/50 border-transparent text-[#586B63] dark:text-[#97ADA4] line-through opacity-75'
+                          : 'bg-white dark:bg-[#1A3029] border-[#E4E8E2] dark:border-[#223D35] text-[#24352F] dark:text-[#E9F4F0] hover:border-[#BCEBFA]'
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -364,11 +364,11 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
                           <span className="font-bold text-xs sm:text-sm">
                             {item.name}
                           </span>
-                          <span className="ml-2 text-xs font-semibold text-[#087E8B] bg-[#BCEBFA]/30 px-2.5 py-0.5 rounded-md border border-[#BCEBFA]">
+                          <span className="ml-2 text-xs font-semibold text-[#087E8B] dark:text-[#45D6C7] bg-[#BCEBFA]/30 dark:bg-[#45D6C7]/20 px-2.5 py-0.5 rounded-md border border-[#BCEBFA] dark:border-[#45D6C7]/30">
                             {item.quantity}
                           </span>
                           {item.recipeSources.length > 0 && (
-                            <span className="text-[10px] text-[#586B63] block pt-0.5">
+                            <span className="text-[10px] text-[#586B63] dark:text-[#97ADA4] block pt-0.5">
                               Needed for: {item.recipeSources.join(', ')}
                             </span>
                           )}
@@ -378,14 +378,14 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
                       <div className="flex items-center gap-2 no-print shrink-0">
                         <button
                           onClick={() => toggleAvailability(item.id)}
-                          className="text-[11px] font-bold text-[#087E8B] hover:underline px-2 py-1 rounded-lg hover:bg-[#FAF8F1] transition-colors cursor-pointer"
+                          className="text-[11px] font-bold text-[#087E8B] dark:text-[#45D6C7] hover:underline px-2 py-1 rounded-lg hover:bg-[#FAF8F1] dark:hover:bg-[#1A3029] transition-colors cursor-pointer btn-interactive"
                           title="Mark that you already have this in pantry"
                         >
                           I have this
                         </button>
                         <button
                           onClick={() => deleteItem(item.id)}
-                          className="p-1.5 text-[#586B63] hover:text-[#F28B78] rounded-lg transition-colors cursor-pointer"
+                          className="p-1.5 text-[#586B63] dark:text-[#97ADA4] hover:text-[#F28B78] rounded-lg transition-colors cursor-pointer btn-interactive"
                           title="Delete from list"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -401,13 +401,13 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
 
         {/* Already In Fridge Section */}
         {itemsInPantry.length > 0 && (
-          <div className="bg-[#FAF8F1] rounded-2xl border border-[#E4E8E2] p-5 space-y-3 no-print">
+          <div className="bg-[#FAF8F1] dark:bg-[#1A3029] rounded-2xl border border-[#E4E8E2] dark:border-[#223D35] p-5 space-y-3 no-print">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-extrabold text-xs uppercase tracking-wider text-[#087E8B]">
+                <h3 className="font-extrabold text-xs uppercase tracking-wider text-[#087E8B] dark:text-[#45D6C7]">
                   Already In Your Fridge ({itemsInPantry.length})
                 </h3>
-                <p className="text-[11px] text-[#586B63]">
+                <p className="text-[11px] text-[#586B63] dark:text-[#97ADA4]">
                   These confirmed pantry items were excluded from your shopping cart.
                 </p>
               </div>
@@ -417,7 +417,7 @@ export const GroceryListScreen: React.FC<GroceryListScreenProps> = ({
               {itemsInPantry.map((item) => (
                 <div
                   key={item.id}
-                  className="px-3 py-1.5 rounded-xl bg-white border border-[#E4E8E2] text-xs font-medium text-[#24352F] flex items-center gap-2 shadow-2xs"
+                  className="px-3 py-1.5 rounded-xl bg-white dark:bg-[#13241F] border border-[#E4E8E2] dark:border-[#223D35] text-xs font-medium text-[#24352F] dark:text-[#E9F4F0] flex items-center gap-2 shadow-2xs card-interactive"
                 >
                   <span className="w-2 h-2 rounded-full bg-[#45D6C7]" />
                   <span>{item.name}</span>

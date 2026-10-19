@@ -35,19 +35,19 @@ export const QualityModal: React.FC<QualityModalProps> = ({ isOpen, onClose }) =
   const allPassed = totalCount > 0 && passedCount === totalCount;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
-      <div className="bg-white w-full max-w-2xl rounded-2xl border border-[#E4E8E2] shadow-xl overflow-hidden flex flex-col max-h-[85vh]">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
+      <div className="bg-white dark:bg-[#13241F] w-full max-w-2xl rounded-2xl border border-[#E4E8E2] dark:border-[#223D35] shadow-xl overflow-hidden flex flex-col max-h-[85vh] transition-colors duration-300">
         {/* Header */}
-        <div className="p-5 border-b border-[#E4E8E2] flex items-center justify-between bg-[#FAF8F1]">
+        <div className="p-5 border-b border-[#E4E8E2] dark:border-[#223D35] flex items-center justify-between bg-[#FAF8F1] dark:bg-[#1A3029]">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-[#087E8B] text-white flex items-center justify-center shadow-2xs">
               <ShieldCheck className="w-4 h-4 text-[#45D6C7]" />
             </div>
             <div>
-              <h2 className="font-extrabold text-lg text-[#24352F]">
+              <h2 className="font-extrabold text-lg text-[#24352F] dark:text-[#E9F4F0]">
                 Quality & Diagnostic Checks
               </h2>
-              <p className="text-xs text-[#586B63]">
+              <p className="text-xs text-[#586B63] dark:text-[#97ADA4]">
                 Automated programmatic test execution for Hacktoberfest 2026 guidelines.
               </p>
             </div>
@@ -55,27 +55,27 @@ export const QualityModal: React.FC<QualityModalProps> = ({ isOpen, onClose }) =
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-[#586B63] hover:text-[#24352F] hover:bg-white transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-[#586B63] dark:text-[#97ADA4] hover:text-[#24352F] dark:hover:text-white hover:bg-white dark:hover:bg-[#13241F] transition-colors cursor-pointer btn-interactive"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Summary Banner */}
-        <div className="p-4 bg-[#BCEBFA]/20 border-b border-[#45D6C7]/30 flex items-center justify-between text-xs sm:text-sm">
+        <div className="p-4 bg-[#BCEBFA]/20 dark:bg-[#45D6C7]/10 border-b border-[#45D6C7]/30 flex items-center justify-between text-xs sm:text-sm">
           <div className="flex items-center gap-2">
             {allPassed ? (
-              <span className="inline-flex items-center gap-1.5 font-bold text-[#087E8B]">
+              <span className="inline-flex items-center gap-1.5 font-bold text-[#087E8B] dark:text-[#45D6C7]">
                 <CheckCircle2 className="w-4 h-4 text-[#45D6C7]" />
                 All {totalCount} Verification Tests Passed
               </span>
             ) : (
-              <span className="font-bold text-[#24352F]">
+              <span className="font-bold text-[#24352F] dark:text-[#E9F4F0]">
                 {passedCount} of {totalCount} tests passed
               </span>
             )}
             {lastExecuted && (
-              <span className="text-[11px] text-[#586B63] hidden sm:inline">
+              <span className="text-[11px] text-[#586B63] dark:text-[#97ADA4] hidden sm:inline">
                 (Executed at {lastExecuted})
               </span>
             )}
@@ -84,7 +84,7 @@ export const QualityModal: React.FC<QualityModalProps> = ({ isOpen, onClose }) =
           <button
             onClick={executeTests}
             disabled={isRunning}
-            className="px-3.5 py-1.5 bg-white border border-[#E4E8E2] hover:border-[#087E8B]/40 text-[#24352F] font-bold text-xs rounded-xl shadow-2xs flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-3.5 py-1.5 bg-white dark:bg-[#13241F] border border-[#E4E8E2] dark:border-[#223D35] hover:border-[#087E8B]/40 text-[#24352F] dark:text-[#E9F4F0] font-bold text-xs rounded-xl shadow-2xs flex items-center gap-1.5 transition-colors cursor-pointer btn-interactive"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isRunning ? 'animate-spin text-[#087E8B]' : ''}`} />
             <span>Re-run Suite</span>
@@ -98,8 +98,8 @@ export const QualityModal: React.FC<QualityModalProps> = ({ isOpen, onClose }) =
               key={test.id}
               className={`p-4 rounded-xl border text-xs sm:text-sm space-y-1.5 transition-all ${
                 test.passed
-                  ? 'bg-white border-[#E4E8E2]'
-                  : 'bg-[#FDF3F0] border-[#F28B78]'
+                  ? 'bg-white dark:bg-[#1A3029] border-[#E4E8E2] dark:border-[#223D35]'
+                  : 'bg-[#FDF3F0] dark:bg-[#2A1715] border-[#F28B78]'
               }`}
             >
               <div className="flex items-start justify-between gap-2">
@@ -110,10 +110,10 @@ export const QualityModal: React.FC<QualityModalProps> = ({ isOpen, onClose }) =
                     <XCircle className="w-4 h-4 text-[#F28B78] shrink-0 mt-0.5" />
                   )}
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-[#586B63] tracking-wider block">
+                    <span className="text-[10px] uppercase font-bold text-[#586B63] dark:text-[#97ADA4] tracking-wider block">
                       {test.category}
                     </span>
-                    <h4 className="font-bold text-xs sm:text-sm text-[#24352F]">
+                    <h4 className="font-bold text-xs sm:text-sm text-[#24352F] dark:text-[#E9F4F0]">
                       {test.name}
                     </h4>
                   </div>
@@ -122,15 +122,15 @@ export const QualityModal: React.FC<QualityModalProps> = ({ isOpen, onClose }) =
                 <span
                   className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                     test.passed
-                      ? 'bg-[#BCEBFA]/30 text-[#087E8B] border border-[#45D6C7]/40'
-                      : 'bg-[#FDF3F0] text-[#F28B78] border border-[#F28B78]'
+                      ? 'bg-[#BCEBFA]/30 dark:bg-[#45D6C7]/20 text-[#087E8B] dark:text-[#45D6C7] border border-[#45D6C7]/40'
+                      : 'bg-[#FDF3F0] dark:bg-[#F28B78]/20 text-[#F28B78] border border-[#F28B78]'
                   }`}
                 >
                   {test.passed ? 'PASSED' : 'FAILED'}
                 </span>
               </div>
 
-              <p className="text-xs text-[#586B63] pl-6.5 leading-relaxed">
+              <p className="text-xs text-[#586B63] dark:text-[#97ADA4] pl-6.5 leading-relaxed">
                 {test.message}
               </p>
             </div>
@@ -138,10 +138,10 @@ export const QualityModal: React.FC<QualityModalProps> = ({ isOpen, onClose }) =
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-[#E4E8E2] bg-[#FAF8F1] flex justify-end">
+        <div className="p-4 border-t border-[#E4E8E2] dark:border-[#223D35] bg-[#FAF8F1] dark:bg-[#1A3029] flex justify-end">
           <button
             onClick={onClose}
-            className="px-6 py-2 rounded-xl bg-[#087E8B] text-white text-xs font-bold hover:bg-[#06626D] transition-colors cursor-pointer shadow-2xs"
+            className="px-6 py-2 rounded-xl bg-[#087E8B] text-white text-xs font-bold hover:bg-[#06626D] transition-colors cursor-pointer shadow-2xs btn-interactive"
           >
             Close
           </button>

@@ -91,22 +91,22 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="max-w-3xl mx-auto py-4 sm:py-8 space-y-7">
       {/* Step Header */}
-      <div className="flex items-center justify-between border-b border-[#E4E8E2] pb-4">
+      <div className="flex items-center justify-between border-b border-[#E4E8E2] dark:border-[#223D35] pb-4">
         <div>
-          <span className="text-xs font-bold text-[#087E8B] uppercase tracking-wider">
+          <span className="text-xs font-bold text-[#087E8B] dark:text-[#45D6C7] uppercase tracking-wider">
             Step 2 of 3
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#24352F] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#24352F] dark:text-[#E9F4F0] tracking-tight">
             How much effort do you want to spend?
           </h2>
-          <p className="text-xs sm:text-sm text-[#586B63] mt-1">
+          <p className="text-xs sm:text-sm text-[#586B63] dark:text-[#97ADA4] mt-1">
             Set your cooking limits, cleanup rules, and dietary boundaries.
           </p>
         </div>
         <button
           type="button"
           onClick={onBack}
-          className="text-xs sm:text-sm font-semibold text-[#586B63] hover:text-[#24352F] px-3 py-1.5 rounded-xl hover:bg-[#E4E8E2]/40 transition-colors flex items-center gap-1.5 cursor-pointer"
+          className="text-xs sm:text-sm font-semibold text-[#586B63] dark:text-[#97ADA4] hover:text-[#24352F] dark:hover:text-white px-3 py-1.5 rounded-xl hover:bg-[#E4E8E2]/40 dark:hover:bg-[#1E352F] transition-colors flex items-center gap-1.5 cursor-pointer btn-interactive"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to ingredients</span>
@@ -114,12 +114,12 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
       </div>
 
       {/* Main Settings Card */}
-      <div className="bg-white rounded-2xl border border-[#E4E8E2] p-5 sm:p-7 space-y-6 shadow-xs">
+      <div className="bg-white dark:bg-[#13241F] rounded-2xl border border-[#E4E8E2] dark:border-[#223D35] p-5 sm:p-7 space-y-6 shadow-xs transition-colors duration-300">
         {/* Servings & Total Time */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {/* Servings */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-[#24352F] uppercase tracking-wider block">
+            <label className="text-xs font-bold text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider block">
               Servings Needed
             </label>
             <div className="grid grid-cols-5 gap-2">
@@ -128,10 +128,10 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
                   key={s}
                   type="button"
                   onClick={() => setPreferences((p) => ({ ...p, servings: s }))}
-                  className={`py-2.5 text-xs sm:text-sm font-bold rounded-xl border transition-all cursor-pointer ${
+                  className={`py-2.5 text-xs sm:text-sm font-bold rounded-xl border transition-all cursor-pointer btn-interactive ${
                     preferences.servings === s
                       ? 'bg-[#087E8B] text-white border-[#087E8B] shadow-2xs'
-                      : 'bg-white text-[#24352F] border-[#E4E8E2] hover:border-[#087E8B]/50 hover:bg-[#FAF8F1]'
+                      : 'bg-white dark:bg-[#1A3029] text-[#24352F] dark:text-[#E9F4F0] border-[#E4E8E2] dark:border-[#223D35] hover:border-[#087E8B]/50 hover:bg-[#FAF8F1] dark:hover:bg-[#223F36]'
                   }`}
                 >
                   {s === 5 ? '5+' : s}
@@ -142,8 +142,8 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
 
           {/* Cooking Time */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-[#24352F] uppercase tracking-wider block flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-[#087E8B]" />
+            <label className="text-xs font-bold text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider block flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-[#087E8B] dark:text-[#45D6C7]" />
               Max Cooking Time
             </label>
             <div className="grid grid-cols-4 gap-2">
@@ -152,10 +152,10 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
                   key={t}
                   type="button"
                   onClick={() => setPreferences((p) => ({ ...p, cookingTimeMinutes: t }))}
-                  className={`py-2.5 text-xs sm:text-sm font-bold rounded-xl border transition-all cursor-pointer ${
+                  className={`py-2.5 text-xs sm:text-sm font-bold rounded-xl border transition-all cursor-pointer btn-interactive ${
                     preferences.cookingTimeMinutes === t
                       ? 'bg-[#087E8B] text-white border-[#087E8B] shadow-2xs'
-                      : 'bg-white text-[#24352F] border-[#E4E8E2] hover:border-[#087E8B]/50 hover:bg-[#FAF8F1]'
+                      : 'bg-white dark:bg-[#1A3029] text-[#24352F] dark:text-[#E9F4F0] border-[#E4E8E2] dark:border-[#223D35] hover:border-[#087E8B]/50 hover:bg-[#FAF8F1] dark:hover:bg-[#223F36]'
                   }`}
                 >
                   {t} mins
@@ -166,10 +166,10 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
         </div>
 
         {/* Effort & Cleanup Preferences */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4 border-t border-[#E4E8E2]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4 border-t border-[#E4E8E2] dark:border-[#223D35]">
           {/* Effort Level */}
           <div className="space-y-2.5">
-            <label className="text-xs font-bold text-[#24352F] uppercase tracking-wider block">
+            <label className="text-xs font-bold text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider block">
               Effort Preference
             </label>
             <div className="space-y-2">
@@ -178,10 +178,10 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
                 return (
                   <label
                     key={level}
-                    className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
+                    className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all card-interactive ${
                       isSelected
-                        ? 'bg-[#BCEBFA]/25 border-[#087E8B] shadow-2xs'
-                        : 'border-[#E4E8E2] hover:bg-[#FAF8F1]'
+                        ? 'bg-[#BCEBFA]/25 dark:bg-[#45D6C7]/15 border-[#087E8B] dark:border-[#45D6C7] shadow-2xs'
+                        : 'border-[#E4E8E2] dark:border-[#223D35] hover:bg-[#FAF8F1] dark:hover:bg-[#1A3029]'
                     }`}
                   >
                     <input
@@ -192,10 +192,10 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
                       className="mt-0.5 text-[#087E8B] focus:ring-[#087E8B]"
                     />
                     <div>
-                      <span className="text-sm font-bold text-[#24352F] block">
+                      <span className="text-sm font-bold text-[#24352F] dark:text-[#E9F4F0] block">
                         {level}
                       </span>
-                      <span className="text-xs text-[#586B63]">
+                      <span className="text-xs text-[#586B63] dark:text-[#97ADA4]">
                         {level === 'Almost no effort' && 'Quick assembly, 1-2 steps, minimal chopping'}
                         {level === 'Easy' && 'Straightforward cooking, light chopping, standard weeknight'}
                         {level === 'Normal' && 'Standard recipe balance with full flavor focus'}
@@ -209,7 +209,7 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
 
           {/* Cleanup Preference */}
           <div className="space-y-2.5">
-            <label className="text-xs font-bold text-[#24352F] uppercase tracking-wider block">
+            <label className="text-xs font-bold text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider block">
               Cleanup Preference
             </label>
             <div className="space-y-2">
@@ -219,10 +219,10 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
                   return (
                     <label
                       key={c}
-                      className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
+                      className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all card-interactive ${
                         isSelected
-                          ? 'bg-[#BCEBFA]/25 border-[#087E8B] shadow-2xs'
-                          : 'border-[#E4E8E2] hover:bg-[#FAF8F1]'
+                          ? 'bg-[#BCEBFA]/25 dark:bg-[#45D6C7]/15 border-[#087E8B] dark:border-[#45D6C7] shadow-2xs'
+                          : 'border-[#E4E8E2] dark:border-[#223D35] hover:bg-[#FAF8F1] dark:hover:bg-[#1A3029]'
                       }`}
                     >
                       <input
@@ -233,10 +233,10 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
                         className="mt-0.5 text-[#087E8B] focus:ring-[#087E8B]"
                       />
                       <div>
-                        <span className="text-sm font-bold text-[#24352F] block">
+                        <span className="text-sm font-bold text-[#24352F] dark:text-[#E9F4F0] block">
                           {c}
                         </span>
-                        <span className="text-xs text-[#586B63]">
+                        <span className="text-xs text-[#586B63] dark:text-[#97ADA4]">
                           {c === 'One-pot or one-pan' && 'Everything cooked in a single skillet, pot, or sheet'}
                           {c === 'Minimal dishes' && 'Keep prep bowls and dirty utensils to a minimum'}
                           {c === 'No preference' && 'Standard kitchen pots and pans usage'}
@@ -251,10 +251,10 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
         </div>
 
         {/* Dietary & Cuisine Preferences */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4 border-t border-[#E4E8E2]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4 border-t border-[#E4E8E2] dark:border-[#223D35]">
           {/* Dietary Option */}
           <div className="space-y-2.5">
-            <label className="text-xs font-bold text-[#24352F] uppercase tracking-wider block">
+            <label className="text-xs font-bold text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider block">
               Dietary Preference
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -263,10 +263,10 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
                   key={d}
                   type="button"
                   onClick={() => setPreferences((p) => ({ ...p, dietary: d }))}
-                  className={`py-2 px-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                  className={`py-2 px-2 text-xs font-bold rounded-xl border transition-all cursor-pointer btn-interactive ${
                     preferences.dietary === d
                       ? 'bg-[#087E8B] text-white border-[#087E8B] shadow-2xs'
-                      : 'bg-white text-[#24352F] border-[#E4E8E2] hover:border-[#087E8B]/50'
+                      : 'bg-white dark:bg-[#1A3029] text-[#24352F] dark:text-[#E9F4F0] border-[#E4E8E2] dark:border-[#223D35] hover:border-[#087E8B]/50'
                   }`}
                 >
                   {d}
@@ -279,13 +279,13 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
               value={preferences.dietaryNotes}
               onChange={(e) => setPreferences((p) => ({ ...p, dietaryNotes: e.target.value }))}
               placeholder="Other dietary requirement (e.g. low-carb, high-protein)"
-              className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-[#E4E8E2] focus:outline-none focus:border-[#087E8B] transition-colors"
+              className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-[#E4E8E2] dark:border-[#223D35] bg-white dark:bg-[#1A3029] text-[#24352F] dark:text-[#E9F4F0] focus:outline-none focus:border-[#087E8B] dark:focus:border-[#45D6C7] transition-colors"
             />
           </div>
 
           {/* Cuisine Preference */}
           <div className="space-y-2.5">
-            <label className="text-xs font-bold text-[#24352F] uppercase tracking-wider block">
+            <label className="text-xs font-bold text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider block">
               Cuisine Preference
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -294,10 +294,10 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
                   key={c}
                   type="button"
                   onClick={() => setPreferences((p) => ({ ...p, cuisine: c }))}
-                  className={`py-2 px-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                  className={`py-2 px-2 text-xs font-bold rounded-xl border transition-all cursor-pointer btn-interactive ${
                     preferences.cuisine === c
                       ? 'bg-[#087E8B] text-white border-[#087E8B] shadow-2xs'
-                      : 'bg-white text-[#24352F] border-[#E4E8E2] hover:border-[#087E8B]/50'
+                      : 'bg-white dark:bg-[#1A3029] text-[#24352F] dark:text-[#E9F4F0] border-[#E4E8E2] dark:border-[#223D35] hover:border-[#087E8B]/50'
                   }`}
                 >
                   {c}
@@ -308,9 +308,9 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
         </div>
 
         {/* Allergies and Ingredients to Avoid */}
-        <div className="space-y-3 pt-4 border-t border-[#E4E8E2]">
+        <div className="space-y-3 pt-4 border-t border-[#E4E8E2] dark:border-[#223D35]">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-bold text-[#24352F] uppercase tracking-wider block flex items-center gap-1.5">
+            <label className="text-xs font-bold text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider block flex items-center gap-1.5">
               <AlertTriangle className="w-3.5 h-3.5 text-[#F28B78]" />
               Allergies & Ingredients to Avoid
             </label>
@@ -325,10 +325,10 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
                   key={allergy}
                   type="button"
                   onClick={() => handleAllergyToggle(allergy)}
-                  className={`px-3 py-1.5 text-xs rounded-xl border transition-all cursor-pointer font-medium ${
+                  className={`px-3 py-1.5 text-xs rounded-xl border transition-all cursor-pointer font-medium btn-interactive ${
                     isSelected
-                      ? 'bg-[#FDF3F0] text-[#F28B78] border-[#F28B78] font-bold shadow-2xs'
-                      : 'bg-[#FAF8F1] text-[#24352F] border-[#E4E8E2] hover:border-[#F28B78]'
+                      ? 'bg-[#FDF3F0] dark:bg-[#F28B78]/20 text-[#F28B78] border-[#F28B78] font-bold shadow-2xs'
+                      : 'bg-[#FAF8F1] dark:bg-[#1A3029] text-[#24352F] dark:text-[#E9F4F0] border-[#E4E8E2] dark:border-[#223D35] hover:border-[#F28B78]'
                   }`}
                 >
                   {isSelected ? `✓ Exclude ${allergy}` : `+ ${allergy}`}
@@ -344,12 +344,12 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
               value={customAvoidInput}
               onChange={(e) => setCustomAvoidInput(e.target.value)}
               placeholder="Add specific ingredient to avoid (e.g. mushrooms, bell peppers)"
-              className="flex-1 text-xs px-3.5 py-2 rounded-xl border border-[#E4E8E2] focus:outline-none focus:border-[#087E8B]"
+              className="flex-1 text-xs px-3.5 py-2 rounded-xl border border-[#E4E8E2] dark:border-[#223D35] bg-white dark:bg-[#1A3029] text-[#24352F] dark:text-[#E9F4F0] focus:outline-none focus:border-[#087E8B] dark:focus:border-[#45D6C7]"
             />
             <button
               type="button"
               onClick={handleAddCustomAvoid}
-              className="px-4 py-2 text-xs bg-[#FAF8F1] hover:bg-[#E4E8E2] text-[#24352F] font-bold rounded-xl border border-[#E4E8E2] transition-colors cursor-pointer"
+              className="px-4 py-2 text-xs bg-[#FAF8F1] dark:bg-[#1A3029] hover:bg-[#E4E8E2] text-[#24352F] dark:text-[#E9F4F0] font-bold rounded-xl border border-[#E4E8E2] dark:border-[#223D35] transition-colors cursor-pointer btn-interactive"
             >
               Add
             </button>
@@ -361,7 +361,7 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
               {preferences.allergiesToAvoid.map((item) => (
                 <span
                   key={item}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#FDF3F0] text-[#F28B78] text-xs font-bold border border-[#F28B78]/40"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#FDF3F0] dark:bg-[#F28B78]/20 text-[#F28B78] text-xs font-bold border border-[#F28B78]/40"
                 >
                   <span>Excluding: {item}</span>
                   <button
@@ -378,11 +378,11 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
         </div>
 
         {/* Basic Pantry Staples */}
-        <div className="space-y-2 pt-4 border-t border-[#E4E8E2]">
-          <label className="text-xs font-bold text-[#24352F] uppercase tracking-wider block">
+        <div className="space-y-2 pt-4 border-t border-[#E4E8E2] dark:border-[#223D35]">
+          <label className="text-xs font-bold text-[#24352F] dark:text-[#E9F4F0] uppercase tracking-wider block">
             Confirmed Basic Staples (Select all you already have)
           </label>
-          <p className="text-xs text-[#586B63]">
+          <p className="text-xs text-[#586B63] dark:text-[#97ADA4]">
             SlothPlate assumes you have these in your cupboards and won't put them on your grocery list.
           </p>
           <div className="flex flex-wrap gap-2 pt-1.5">
@@ -393,10 +393,10 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
                   key={staple}
                   type="button"
                   onClick={() => handleStapleToggle(staple)}
-                  className={`px-3 py-1.5 text-xs rounded-xl border transition-all cursor-pointer font-medium ${
+                  className={`px-3 py-1.5 text-xs rounded-xl border transition-all cursor-pointer font-medium btn-interactive ${
                     hasIt
-                      ? 'bg-[#BCEBFA]/30 text-[#087E8B] border-[#45D6C7] font-bold shadow-2xs'
-                      : 'bg-white text-[#586B63] border-[#E4E8E2] hover:border-[#45D6C7]/60'
+                      ? 'bg-[#BCEBFA]/30 dark:bg-[#45D6C7]/20 text-[#087E8B] dark:text-[#45D6C7] border-[#45D6C7] font-bold shadow-2xs'
+                      : 'bg-white dark:bg-[#1A3029] text-[#586B63] dark:text-[#97ADA4] border-[#E4E8E2] dark:border-[#223D35] hover:border-[#45D6C7]/60'
                   }`}
                 >
                   {hasIt ? `✓ ${staple}` : staple}
@@ -407,31 +407,31 @@ export const PreferenceForm: React.FC<PreferenceFormProps> = ({
         </div>
 
         {/* Safety & Allergy Disclaimer */}
-        <div className="p-4 rounded-xl bg-[#FAF8F1] border border-[#BCEBFA] flex items-start gap-2.5 text-xs text-[#24352F]">
-          <ShieldCheck className="w-4 h-4 text-[#087E8B] shrink-0 mt-0.5" />
+        <div className="p-4 rounded-xl bg-[#FAF8F1] dark:bg-[#1A3029] border border-[#BCEBFA] dark:border-[#223D35] flex items-start gap-2.5 text-xs text-[#24352F] dark:text-[#E9F4F0]">
+          <ShieldCheck className="w-4 h-4 text-[#087E8B] dark:text-[#45D6C7] shrink-0 mt-0.5" />
           <div className="leading-relaxed">
-            <strong className="text-[#24352F]">Safety disclaimer:</strong> Recipe suggestions are AI estimates based on your input. Never assume a recipe is guaranteed 100% allergen-free. Always inspect all packaged foods, seasonings, and raw ingredients yourself before consumption.
+            <strong>Safety disclaimer:</strong> Recipe suggestions are AI estimates based on your input. Never assume a recipe is guaranteed 100% allergen-free. Always inspect all packaged foods, seasonings, and raw ingredients yourself before consumption.
           </div>
         </div>
 
         {/* Submit Button */}
         <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-3.5">
-          <p className="text-xs text-[#586B63]">
+          <p className="text-xs text-[#586B63] dark:text-[#97ADA4]">
             Ready to design 3 low-effort meals with your confirmed ingredients.
           </p>
           <button
             type="submit"
             disabled={isGenerating}
-            className={`w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2.5 shadow-xs transition-all ${
+            className={`w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2.5 shadow-xs transition-all btn-interactive ${
               isGenerating
-                ? 'bg-[#E4E8E2] text-[#586B63] cursor-not-allowed'
+                ? 'bg-[#E4E8E2] dark:bg-[#223D35] text-[#586B63] dark:text-[#97ADA4] cursor-not-allowed'
                 : 'bg-[#087E8B] hover:bg-[#06626D] text-white cursor-pointer hover:shadow-md'
             }`}
           >
             {isGenerating ? (
               <>
                 <div className="w-4 h-4 border-2 border-white/60 border-t-white rounded-full animate-spin" />
-                <span>Gemma 4 is designing meals...</span>
+                <span className="animate-pulse">Gemma 4 is designing meals...</span>
               </>
             ) : (
               <>
