@@ -1,0 +1,6 @@
+{
+  "name": "SlothPlate",
+  "description": "An open-weight AI fridge-to-meal planner powered by Gemma that suggests low-effort recipes and consolidated grocery lists from what is already in your fridge.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
