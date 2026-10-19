@@ -8,6 +8,7 @@ import { GroceryListScreen } from './components/GroceryListScreen';
 import { SavedPlansModal } from './components/SavedPlansModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { QualityModal } from './components/QualityModal';
+import { WaterBackground } from './components/WaterBackground';
 import { Ingredient, Recipe, UserPreferences, GroceryItem, SavedMealPlan } from './types';
 import { consolidateGroceryList } from './utils/groceryConsolidator';
 import {
@@ -232,7 +233,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF8F1] text-[#26342D]">
+    <div className="min-h-screen flex flex-col relative text-[#24352F] selection:bg-[#BCEBFA] selection:text-[#087E8B]">
+      {/* Animated Liquid Water Background */}
+      <WaterBackground subdued={currentStep !== 'landing'} />
+
       {/* App Navigation Bar */}
       <Header
         onGoHome={() => setCurrentStep('landing')}
@@ -244,15 +248,15 @@ export default function App() {
       />
 
       {/* Main Content Viewport */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 relative z-10">
         {/* Error Banner when generation fails */}
         {generationError && (
-          <div className="my-4 p-4 rounded-2xl bg-[#FDF3F0] border border-[#E98B70] text-[#26342D] text-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+          <div className="my-4 p-4 rounded-2xl bg-[#FDF3F0] border border-[#F28B78] text-[#24352F] text-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
             <div className="flex items-start gap-2.5">
-              <AlertCircle className="w-5 h-5 text-[#E98B70] shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-[#F28B78] shrink-0 mt-0.5" />
               <div>
                 <p className="font-bold">{generationError.message}</p>
-                <p className="text-xs text-[#66746B]">
+                <p className="text-xs text-[#586B63]">
                   Your ingredients and preferences are safely preserved. You can retry with Gemma or explore the realistic sample plan.
                 </p>
               </div>
@@ -262,14 +266,14 @@ export default function App() {
               <button
                 onClick={() => handleGenerateMeals(preferences)}
                 disabled={isGeneratingMeals}
-                className="px-3.5 py-1.5 text-xs font-bold bg-white border border-[#E8E6DC] hover:border-[#285943]/40 rounded-xl transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 text-xs font-bold bg-white border border-[#E4E8E2] hover:border-[#087E8B]/60 rounded-xl transition-colors cursor-pointer"
               >
                 Retry Request
               </button>
               {generationError.canUseSample && (
                 <button
                   onClick={handleTrySamplePlan}
-                  className="px-3.5 py-1.5 text-xs font-bold bg-[#285943] hover:bg-[#1E4332] text-white rounded-xl transition-colors cursor-pointer shadow-2xs"
+                  className="px-3.5 py-1.5 text-xs font-bold bg-[#087E8B] hover:bg-[#06626D] text-white rounded-xl transition-colors cursor-pointer shadow-2xs"
                 >
                   Switch to Sample Plan
                 </button>
@@ -333,10 +337,10 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-[#E8E6DC] bg-[#FAF8F1]/90 py-8 no-print">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#66746B]">
+      <footer className="mt-auto border-t border-[#E4E8E2] bg-[#FAF8F1]/85 backdrop-blur-md py-8 no-print">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#586B63]">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-[#26342D]">SlothPlate</span>
+            <span className="font-bold text-[#24352F]">SlothPlate</span>
             <span>•</span>
             <span>Hacktoberfest 2026 Open-Source AI Challenge (Week 3: Slow and Steady)</span>
           </div>
@@ -344,19 +348,19 @@ export default function App() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsPrivacyModalOpen(true)}
-              className="hover:text-[#285943] transition-colors cursor-pointer"
+              className="hover:text-[#087E8B] transition-colors cursor-pointer"
             >
               Open AI & Privacy
             </button>
             <button
               onClick={() => setIsQualityModalOpen(true)}
-              className="hover:text-[#285943] transition-colors cursor-pointer"
+              className="hover:text-[#087E8B] transition-colors cursor-pointer"
             >
               Quality & Tests
             </button>
             <button
               onClick={() => setIsSavedPlansModalOpen(true)}
-              className="hover:text-[#285943] transition-colors cursor-pointer"
+              className="hover:text-[#087E8B] transition-colors cursor-pointer"
             >
               Saved Plans ({savedPlans.length})
             </button>

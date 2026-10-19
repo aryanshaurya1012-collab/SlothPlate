@@ -2,70 +2,139 @@
 
 @layer base {
   :root {
-    /* Primary 6-color palette */
-    --forest-green: #285943;
-    --forest-dark: #1E4332;
-    --leaf-green: #78A878;
-    --leaf-green-light: #F0F5F0;
-    --butter-yellow: #F4CF77;
-    --butter-yellow-light: #FEF9EB;
-    --soft-coral: #E98B70;
-    --soft-coral-light: #FDF3F0;
-    --powder-blue: #BFDDE8;
-    --powder-blue-light: #F2F8FA;
-    --lavender: #D9CFF0;
-    --lavender-light: #F7F5FC;
-
-    /* Supporting neutrals */
+    /* Coordinated Liquid Water & Culinary Palette */
+    --deep-teal: #087E8B;
+    --bright-aqua: #45D6C7;
+    --ocean-blue: #4F8FE8;
+    --sky-blue: #BCEBFA;
+    --warm-coral: #F28B78;
+    --butter-yellow: #F5D778;
     --bg-main: #FAF8F1;
+    --text-primary: #24352F;
+    --text-secondary: #586B63;
     --surface-white: #FFFFFF;
-    --text-primary: #26342D;
-    --text-secondary: #66746B;
-    --border-neutral: #E8E6DC;
+    --border-neutral: #E4E8E2;
   }
 
   body {
     background-color: var(--bg-main);
     color: var(--text-primary);
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
   }
 }
 
-/* Layered subtle background gradients */
-.bg-hero-gradient {
-  background: 
-    radial-gradient(ellipse 60% 45% at 85% 15%, rgba(120, 168, 120, 0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 20% 40%, rgba(244, 207, 119, 0.14) 0%, transparent 65%),
-    radial-gradient(ellipse 70% 35% at 50% 95%, rgba(191, 221, 232, 0.18) 0%, transparent 75%),
-    #FAF8F1;
+/* -------------------------------------------------------------
+ * FLUID LIQUID WATER BACKGROUND ANIMATIONS (GPU Accelerated)
+ * ----------------------------------------------------------- */
+
+/* Primary Flow: Aqua to Ocean Blue water swell */
+@keyframes water-flow-primary {
+  0% {
+    transform: translate3d(-5%, -4%, 0) scale(1) rotate(0deg);
+  }
+  35% {
+    transform: translate3d(4%, 3%, 0) scale(1.08) rotate(3deg);
+  }
+  70% {
+    transform: translate3d(-3%, 6%, 0) scale(0.96) rotate(-2deg);
+  }
+  100% {
+    transform: translate3d(5%, -5%, 0) scale(1.05) rotate(2deg);
+  }
 }
 
-.bg-scanner-gradient {
-  background:
-    radial-gradient(circle at 10% 20%, rgba(120, 168, 120, 0.10) 0%, transparent 50%),
-    radial-gradient(circle at 90% 80%, rgba(191, 221, 232, 0.14) 0%, transparent 50%),
-    #FAF8F1;
+/* Secondary Flow: Deep Teal and Soft Sky Blue counter-current */
+@keyframes water-flow-secondary {
+  0% {
+    transform: translate3d(6%, 4%, 0) scale(1.06) rotate(0deg);
+  }
+  30% {
+    transform: translate3d(-4%, -5%, 0) scale(0.94) rotate(-4deg);
+  }
+  65% {
+    transform: translate3d(3%, -2%, 0) scale(1.09) rotate(3deg);
+  }
+  100% {
+    transform: translate3d(-5%, 3%, 0) scale(1) rotate(-1deg);
+  }
 }
 
-.bg-meals-gradient {
-  background:
-    radial-gradient(circle at 20% 10%, rgba(244, 207, 119, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 80% 60%, rgba(217, 207, 240, 0.12) 0%, transparent 50%),
-    #FAF8F1;
+/* Sunlight Blooms: Warm Coral & Butter Yellow sunlight drifting through water */
+@keyframes sunlight-bloom-drift {
+  0% {
+    transform: translate3d(-3%, 2%, 0) scale(0.95);
+    opacity: 0.55;
+  }
+  45% {
+    transform: translate3d(4%, -4%, 0) scale(1.12);
+    opacity: 0.85;
+  }
+  80% {
+    transform: translate3d(-2%, 5%, 0) scale(1.02);
+    opacity: 0.65;
+  }
+  100% {
+    transform: translate3d(-3%, 2%, 0) scale(0.95);
+    opacity: 0.55;
+  }
 }
 
-.bg-grocery-gradient {
-  background:
-    radial-gradient(circle at 90% 10%, rgba(120, 168, 120, 0.10) 0%, transparent 45%),
-    radial-gradient(circle at 15% 75%, rgba(191, 221, 232, 0.14) 0%, transparent 55%),
-    #FAF8F1;
+/* Light Caustics / Ripple Shimmer Layer */
+@keyframes water-ripple-surface {
+  0% {
+    transform: translate3d(0%, 0%, 0) scale(1);
+    opacity: 0.40;
+  }
+  50% {
+    transform: translate3d(2%, 2%, 0) scale(1.04);
+    opacity: 0.70;
+  }
+  100% {
+    transform: translate3d(-1%, -1%, 0) scale(0.98);
+    opacity: 0.40;
+  }
 }
 
+/* Animation utility classes with will-change for performance */
+.animate-water-primary {
+  animation: water-flow-primary 24s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.animate-water-secondary {
+  animation: water-flow-secondary 30s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.animate-sunlight-blooms {
+  animation: sunlight-bloom-drift 20s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+.animate-water-ripples {
+  animation: water-ripple-surface 16s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+/* Accessibility: Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .animate-water-primary,
+  .animate-water-secondary,
+  .animate-sunlight-blooms,
+  .animate-water-ripples {
+    animation: none !important;
+  }
+}
+
+/* Print optimizations: completely disable water backgrounds for clean printing */
 @media print {
   body {
-    background-color: #FFFFFF !important;
+    background: #FFFFFF !important;
     color: #000000 !important;
   }
+  .water-background-container,
   .no-print {
     display: none !important;
   }

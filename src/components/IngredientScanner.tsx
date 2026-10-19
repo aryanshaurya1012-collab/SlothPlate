@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Camera, Upload, Trash2, Plus, AlertCircle, Sparkles, Check, HelpCircle, RefreshCw, ArrowRight, ShieldCheck, CheckCircle2, HelpCircle as QuestionIcon } from 'lucide-react';
-import { ConfidenceLevel, Ingredient } from '../types';
+import { Camera, Upload, Trash2, Plus, AlertCircle, Sparkles, RefreshCw, ArrowRight, ShieldCheck, CheckCircle2, HelpCircle as QuestionIcon } from 'lucide-react';
+import { Ingredient } from '../types';
 import { validateImageFile, validateIngredientInput, sanitizeIngredientName } from '../utils/validation';
 
 interface IngredientScannerProps {
@@ -65,58 +65,62 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
         });
 
         newUploads.push({
-          id: `img-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+          id: `img-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
           file,
           previewUrl: URL.createObjectURL(file),
           base64Data,
           mimeType: file.type,
         });
       } catch (err) {
-        console.error('File read error', err);
-        setErrorNotice('Could not read image file.');
+        console.error('File read error:', err);
+        setErrorNotice('Could not load one of the selected images.');
       }
     }
 
     setImages((prev) => [...prev, ...newUploads]);
-    if (fileInputRef.current) fileInputRef.current.value = '';
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const removeImage = (id: string) => {
     setImages((prev) => {
-      const removed = prev.find((img) => img.id === id);
-      if (removed) URL.revokeObjectURL(removed.previewUrl);
-      return prev.filter((img) => img.id !== id);
+      const target = prev.find((i) => i.id === id);
+      if (target?.previewUrl) {
+        URL.revokeObjectURL(target.previewUrl);
+      }
+      return prev.filter((i) => i.id !== id);
     });
   };
 
-  // Trigger AI analysis via POST /api/analyze-pantry
+  // Identify ingredients using open-weight Gemma endpoint
   const handleIdentifyIngredients = async () => {
+    setErrorNotice(null);
     if (images.length === 0 && !manualNotes.trim()) {
-      setErrorNotice('Please upload at least one fridge photo or add manual notes before scanning.');
+      setErrorNotice('Please upload at least 1 image or type ingredients below.');
       return;
     }
 
     setIsScanning(true);
-    setErrorNotice(null);
 
     try {
       const payload = {
         images: images.map((img) => ({
-          data: img.base64Data,
+          base64: img.base64Data,
           mimeType: img.mimeType,
         })),
-        manualNotes: manualNotes.trim() || undefined,
+        notes: manualNotes,
       };
 
-      const res = await fetch('/api/analyze-pantry', {
+      const response = await fetch('/api/analyze-pantry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if (!res.ok || !data.success) {
+      if (!response.ok || !data.success) {
         throw new Error(data.error || 'Failed to detect ingredients with AI model.');
       }
 
@@ -166,16 +170,16 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
     setErrorNotice(null);
   };
 
-  // Quick suggestion chips with varied pastel colors
+  // Quick suggestion chips with coordinated palette
   const quickSuggestions = [
-    { name: 'Eggs', color: 'bg-[#FEF9EB] text-[#26342D] border-[#F4CF77]' },
-    { name: 'Cheddar cheese', color: 'bg-[#FEF9EB] text-[#26342D] border-[#F4CF77]' },
-    { name: 'Spinach', color: 'bg-[#F0F5F0] text-[#285943] border-[#78A878]' },
-    { name: 'Cherry tomatoes', color: 'bg-[#FDF3F0] text-[#26342D] border-[#E98B70]' },
-    { name: 'Sourdough bread', color: 'bg-[#FAF8F1] text-[#26342D] border-[#E8E6DC]' },
-    { name: 'Garlic', color: 'bg-[#F2F8FA] text-[#285943] border-[#BFDDE8]' },
-    { name: 'Butter', color: 'bg-[#FEF9EB] text-[#26342D] border-[#F4CF77]' },
-    { name: 'Olive oil', color: 'bg-[#F0F5F0] text-[#285943] border-[#78A878]' },
+    { name: 'Eggs', color: 'bg-[#FEF9EB] text-[#24352F] border-[#F5D778]' },
+    { name: 'Cheddar cheese', color: 'bg-[#FEF9EB] text-[#24352F] border-[#F5D778]' },
+    { name: 'Spinach', color: 'bg-[#BCEBFA]/30 text-[#087E8B] border-[#45D6C7]' },
+    { name: 'Cherry tomatoes', color: 'bg-[#FDF3F0] text-[#24352F] border-[#F28B78]' },
+    { name: 'Sourdough bread', color: 'bg-[#FAF8F1] text-[#24352F] border-[#E4E8E2]' },
+    { name: 'Garlic', color: 'bg-[#BCEBFA]/40 text-[#087E8B] border-[#BCEBFA]' },
+    { name: 'Butter', color: 'bg-[#FEF9EB] text-[#24352F] border-[#F5D778]' },
+    { name: 'Olive oil', color: 'bg-[#BCEBFA]/30 text-[#087E8B] border-[#45D6C7]' },
   ];
 
   const addSuggestion = (name: string) => {
@@ -214,34 +218,34 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
   return (
     <div className="max-w-3xl mx-auto py-4 sm:py-8 space-y-7">
       {/* Step Header */}
-      <div className="flex items-center justify-between border-b border-[#E8E6DC] pb-4">
+      <div className="flex items-center justify-between border-b border-[#E4E8E2] pb-4">
         <div>
-          <span className="text-xs font-bold text-[#285943] uppercase tracking-wider">
+          <span className="text-xs font-bold text-[#087E8B] uppercase tracking-wider">
             Step 1 of 3
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#26342D] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#24352F] tracking-tight">
             What's in your fridge or pantry?
           </h2>
-          <p className="text-xs sm:text-sm text-[#66746B] mt-1">
+          <p className="text-xs sm:text-sm text-[#586B63] mt-1">
             Snap photos of your shelves or type items. You can review and adjust every detected estimate.
           </p>
         </div>
         <button
           onClick={onBack}
-          className="text-xs sm:text-sm font-semibold text-[#66746B] hover:text-[#26342D] px-3 py-1.5 rounded-xl hover:bg-[#E8E6DC]/40 transition-colors cursor-pointer"
+          className="text-xs sm:text-sm font-semibold text-[#586B63] hover:text-[#24352F] px-3 py-1.5 rounded-xl hover:bg-[#E4E8E2]/40 transition-colors cursor-pointer"
         >
           Back
         </button>
       </div>
 
-      {/* Image Upload Zone with Pale Mint / Powder Blue tint */}
-      <div className="bg-white rounded-2xl border border-[#E8E6DC] p-5 sm:p-7 space-y-5 shadow-xs">
+      {/* Image Upload Zone with Crisp White Surface and Subtle Sky Blue Accents */}
+      <div className="bg-white rounded-2xl border border-[#E4E8E2] p-5 sm:p-7 space-y-5 shadow-xs">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-bold text-[#26342D] flex items-center gap-2">
-            <Camera className="w-4 h-4 text-[#285943]" />
+          <label className="text-sm font-bold text-[#24352F] flex items-center gap-2">
+            <Camera className="w-4 h-4 text-[#087E8B]" />
             Upload Fridge Photos (Max 3)
           </label>
-          <span className="text-xs font-semibold text-[#66746B] bg-[#F2F8FA] px-2.5 py-0.5 rounded-full border border-[#BFDDE8]">
+          <span className="text-xs font-semibold text-[#586B63] bg-[#BCEBFA]/30 px-2.5 py-0.5 rounded-full border border-[#BCEBFA]">
             {images.length}/3 uploaded • Max 5MB each
           </span>
         </div>
@@ -251,7 +255,7 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
           {images.map((img, idx) => (
             <div
               key={img.id}
-              className="relative aspect-square rounded-2xl overflow-hidden border border-[#E8E6DC] bg-[#FAF8F1] group shadow-2xs"
+              className="relative aspect-square rounded-2xl overflow-hidden border border-[#E4E8E2] bg-[#FAF8F1] group shadow-2xs"
             >
               <img
                 src={img.previewUrl}
@@ -260,12 +264,12 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
               />
               <button
                 onClick={() => removeImage(img.id)}
-                className="absolute top-1.5 right-1.5 p-1.5 bg-white/95 hover:bg-white text-[#E98B70] hover:text-rose-600 rounded-lg shadow-sm transition-colors cursor-pointer"
+                className="absolute top-1.5 right-1.5 p-1.5 bg-white/95 hover:bg-white text-[#F28B78] hover:text-rose-600 rounded-lg shadow-sm transition-colors cursor-pointer"
                 title="Remove photo"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
-              <div className="absolute bottom-1.5 left-1.5 text-[10px] font-bold bg-[#26342D]/80 text-white px-2 py-0.5 rounded-md backdrop-blur-xs">
+              <div className="absolute bottom-1.5 left-1.5 text-[10px] font-bold bg-[#24352F]/80 text-white px-2 py-0.5 rounded-md backdrop-blur-xs">
                 Photo {idx + 1}
               </div>
             </div>
@@ -274,15 +278,15 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
           {images.length < 3 && (
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="aspect-square rounded-2xl border-2 border-dashed border-[#BFDDE8] hover:border-[#285943] bg-[#F2F8FA] hover:bg-[#FAF8F1] flex flex-col items-center justify-center p-3 text-center transition-all group cursor-pointer"
+              className="aspect-square rounded-2xl border-2 border-dashed border-[#BCEBFA] hover:border-[#087E8B] bg-[#FAF8F1] hover:bg-[#BCEBFA]/20 flex flex-col items-center justify-center p-3 text-center transition-all group cursor-pointer"
             >
-              <div className="w-10 h-10 rounded-xl bg-white text-[#285943] border border-[#BFDDE8] flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform mb-2">
-                <Upload className="w-4 h-4 text-[#285943]" />
+              <div className="w-10 h-10 rounded-xl bg-white text-[#087E8B] border border-[#BCEBFA] flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform mb-2">
+                <Upload className="w-4 h-4 text-[#087E8B]" />
               </div>
-              <span className="text-xs font-bold text-[#26342D]">
+              <span className="text-xs font-bold text-[#24352F]">
                 {images.length === 0 ? 'Upload Photo' : 'Add another'}
               </span>
-              <span className="text-[10px] text-[#66746B] mt-0.5">JPEG, PNG, WebP</span>
+              <span className="text-[10px] text-[#586B63] mt-0.5">JPEG, PNG, WebP</span>
             </button>
           )}
         </div>
@@ -298,7 +302,7 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
 
         {/* Optional Notes */}
         <div>
-          <label className="text-xs font-semibold text-[#66746B] block mb-1.5">
+          <label className="text-xs font-semibold text-[#586B63] block mb-1.5">
             Optional notes about your fridge (e.g. "Leftover rice in plastic container, 4 eggs in door rack"):
           </label>
           <input
@@ -306,15 +310,15 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
             value={manualNotes}
             onChange={(e) => setManualNotes(e.target.value)}
             placeholder="e.g. half block of sharp cheddar, fresh spinach in crisper"
-            className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-[#E8E6DC] bg-[#FAF8F1]/60 focus:bg-white focus:outline-none focus:border-[#285943] transition-colors"
+            className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-[#E4E8E2] bg-[#FAF8F1]/60 focus:bg-white focus:outline-none focus:border-[#087E8B] transition-colors"
           />
         </div>
 
-        {/* Privacy & Safety Notice with Powder Blue tint */}
-        <div className="p-3.5 rounded-xl bg-[#F2F8FA] border border-[#BFDDE8] flex items-start gap-2.5 text-xs text-[#26342D]">
-          <ShieldCheck className="w-4 h-4 text-[#285943] shrink-0 mt-0.5" />
+        {/* Privacy & Safety Notice */}
+        <div className="p-3.5 rounded-xl bg-[#FAF8F1] border border-[#BCEBFA] flex items-start gap-2.5 text-xs text-[#24352F]">
+          <ShieldCheck className="w-4 h-4 text-[#087E8B] shrink-0 mt-0.5" />
           <div className="leading-relaxed">
-            <strong className="text-[#26342D]">Privacy note:</strong> Photos are sent to the hosted open-weight Gemma model for real-time ingredient analysis. Photos are processed in memory and are never permanently stored.
+            <strong className="text-[#24352F]">Privacy note:</strong> Photos are sent to the hosted open-weight Gemma model for real-time ingredient analysis. Photos are processed in memory and are never permanently stored.
           </div>
         </div>
 
@@ -325,28 +329,28 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
             disabled={isScanning || (images.length === 0 && !manualNotes.trim())}
             className={`w-full sm:w-auto px-7 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-xs transition-all ${
               isScanning || (images.length === 0 && !manualNotes.trim())
-                ? 'bg-[#E8E6DC] text-[#66746B] cursor-not-allowed'
-                : 'bg-[#285943] hover:bg-[#1E4332] text-white cursor-pointer hover:shadow'
+                ? 'bg-[#E4E8E2] text-[#586B63] cursor-not-allowed'
+                : 'bg-[#087E8B] hover:bg-[#06626D] text-white cursor-pointer hover:shadow'
             }`}
           >
             {isScanning ? (
               <>
-                <RefreshCw className="w-4 h-4 animate-spin text-[#F4CF77]" />
+                <RefreshCw className="w-4 h-4 animate-spin text-[#F5D778]" />
                 <span>Gemma 4 is inspecting fridge...</span>
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 text-[#F4CF77]" />
+                <Sparkles className="w-4 h-4 text-[#F5D778]" />
                 <span>Identify ingredients</span>
               </>
             )}
           </button>
 
-          <span className="text-xs text-[#66746B] hidden sm:inline">or</span>
+          <span className="text-xs text-[#586B63] hidden sm:inline">or</span>
 
           <button
             onClick={onUseSampleIngredients}
-            className="text-xs font-bold text-[#285943] hover:underline cursor-pointer"
+            className="text-xs font-bold text-[#087E8B] hover:underline cursor-pointer"
           >
             Load sample ingredients (Eggs, Cheddar, Spinach, Sourdough)
           </button>
@@ -355,11 +359,11 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
 
       {/* Error Notice */}
       {errorNotice && (
-        <div className="p-4 rounded-2xl bg-[#FDF3F0] border border-[#E98B70] text-[#26342D] text-xs sm:text-sm flex items-start gap-3 shadow-2xs">
-          <AlertCircle className="w-5 h-5 text-[#E98B70] shrink-0 mt-0.5" />
+        <div className="p-4 rounded-2xl bg-[#FDF3F0] border border-[#F28B78] text-[#24352F] text-xs sm:text-sm flex items-start gap-3 shadow-2xs">
+          <AlertCircle className="w-5 h-5 text-[#F28B78] shrink-0 mt-0.5" />
           <div className="space-y-1">
             <p className="font-bold">{errorNotice}</p>
-            <p className="text-xs text-[#66746B]">
+            <p className="text-xs text-[#586B63]">
               You can still type ingredients manually below or click "Load sample ingredients" to proceed without delay.
             </p>
           </div>
@@ -367,8 +371,8 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
       )}
 
       {/* Manual Input Form */}
-      <div className="bg-white rounded-2xl border border-[#E8E6DC] p-5 sm:p-6 space-y-4 shadow-xs">
-        <label className="text-sm font-bold text-[#26342D] block">
+      <div className="bg-white rounded-2xl border border-[#E4E8E2] p-5 sm:p-6 space-y-4 shadow-xs">
+        <label className="text-sm font-bold text-[#24352F] block">
           Add or Type Ingredients Manually
         </label>
 
@@ -378,11 +382,11 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
             value={manualInput}
             onChange={(e) => setManualInput(e.target.value)}
             placeholder="e.g. Baby spinach, 4 Eggs, Sharp cheddar, Sourdough"
-            className="flex-1 text-sm px-3.5 py-2.5 rounded-xl border border-[#E8E6DC] focus:outline-none focus:border-[#285943] transition-colors"
+            className="flex-1 text-sm px-3.5 py-2.5 rounded-xl border border-[#E4E8E2] focus:outline-none focus:border-[#087E8B] transition-colors"
           />
           <button
             type="submit"
-            className="px-5 py-2.5 rounded-xl bg-[#285943] hover:bg-[#1E4332] text-white font-bold text-sm flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+            className="px-5 py-2.5 rounded-xl bg-[#087E8B] hover:bg-[#06626D] text-white font-bold text-sm flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
           >
             <Plus className="w-4 h-4" />
             <span>Add</span>
@@ -391,7 +395,7 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
 
         {/* Quick Suggestion Chips */}
         <div className="space-y-2 pt-1">
-          <span className="text-[11px] font-bold text-[#66746B] uppercase tracking-wider block">
+          <span className="text-[11px] font-bold text-[#586B63] uppercase tracking-wider block">
             Quick additions:
           </span>
           <div className="flex flex-wrap gap-2">
@@ -401,7 +405,7 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
                 onClick={() => addSuggestion(item.name)}
                 className={`px-3 py-1 text-xs rounded-xl font-medium border transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs hover:scale-102 ${item.color}`}
               >
-                <Plus className="w-3 h-3 text-[#285943]" />
+                <Plus className="w-3 h-3 text-[#087E8B]" />
                 {item.name}
               </button>
             ))}
@@ -410,20 +414,20 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
       </div>
 
       {/* Confirmed / Detected Ingredients List */}
-      <div className="bg-white rounded-2xl border border-[#E8E6DC] p-5 sm:p-7 space-y-5 shadow-xs">
-        <div className="flex items-center justify-between border-b border-[#E8E6DC] pb-3.5">
+      <div className="bg-white rounded-2xl border border-[#E4E8E2] p-5 sm:p-7 space-y-5 shadow-xs">
+        <div className="flex items-center justify-between border-b border-[#E4E8E2] pb-3.5">
           <div>
-            <h3 className="font-extrabold text-base text-[#26342D]">
+            <h3 className="font-extrabold text-base text-[#24352F]">
               Confirmed Ingredients ({ingredients.length})
             </h3>
-            <p className="text-xs text-[#66746B]">
+            <p className="text-xs text-[#586B63]">
               Review, edit estimated quantities, or remove items before generating meals.
             </p>
           </div>
           {ingredients.length > 0 && (
             <button
               onClick={() => setIngredients([])}
-              className="text-xs font-semibold text-[#E98B70] hover:text-rose-700 hover:underline cursor-pointer"
+              className="text-xs font-semibold text-[#F28B78] hover:text-rose-700 hover:underline cursor-pointer"
             >
               Clear all
             </button>
@@ -431,8 +435,8 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
         </div>
 
         {ingredients.length === 0 ? (
-          <div className="py-10 text-center text-[#66746B] space-y-2">
-            <p className="text-sm font-semibold text-[#26342D]">No ingredients added yet.</p>
+          <div className="py-10 text-center text-[#586B63] space-y-2">
+            <p className="text-sm font-semibold text-[#24352F]">No ingredients added yet.</p>
             <p className="text-xs">
               Upload a fridge photo above, type items in the box, or click a quick suggestion.
             </p>
@@ -446,8 +450,8 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
                   key={ing.id}
                   className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between gap-2.5 ${
                     isHigh
-                      ? 'bg-[#F0F5F0] border-[#78A878]/40 hover:border-[#78A878]'
-                      : 'bg-[#FEF9EB] border-[#F4CF77] hover:border-amber-400'
+                      ? 'bg-[#BCEBFA]/20 border-[#45D6C7]/50 hover:border-[#087E8B]'
+                      : 'bg-[#FEF9EB] border-[#F5D778] hover:border-amber-400'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -456,13 +460,13 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
                         type="text"
                         value={ing.name}
                         onChange={(e) => updateIngredient(ing.id, { name: e.target.value })}
-                        className="font-bold text-sm text-[#26342D] bg-transparent border-b border-transparent hover:border-[#E8E6DC] focus:border-[#285943] focus:outline-none w-full"
+                        className="font-bold text-sm text-[#24352F] bg-transparent border-b border-transparent hover:border-[#E4E8E2] focus:border-[#087E8B] focus:outline-none w-full"
                       />
                     </div>
 
                     <button
                       onClick={() => removeIngredient(ing.id)}
-                      className="p-1 text-[#66746B] hover:text-[#E98B70] rounded-lg hover:bg-white transition-colors cursor-pointer shrink-0"
+                      className="p-1 text-[#586B63] hover:text-[#F28B78] rounded-lg hover:bg-white transition-colors cursor-pointer shrink-0"
                       title="Remove ingredient"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -471,7 +475,7 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
 
                   <div className="flex items-center justify-between text-xs pt-1 border-t border-black/5">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[#66746B] font-medium text-[11px]">Qty:</span>
+                      <span className="text-[#586B63] font-medium text-[11px]">Qty:</span>
                       <input
                         type="text"
                         value={ing.estimatedQuantity}
@@ -479,7 +483,7 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
                           updateIngredient(ing.id, { estimatedQuantity: e.target.value })
                         }
                         placeholder="e.g. 4 pcs, 1 cup"
-                        className="text-xs font-semibold text-[#26342D] bg-white px-2 py-0.5 rounded-md border border-[#E8E6DC] focus:outline-none focus:border-[#285943] w-24"
+                        className="text-xs font-semibold text-[#24352F] bg-white px-2 py-0.5 rounded-md border border-[#E4E8E2] focus:outline-none focus:border-[#087E8B] w-24"
                       />
                     </div>
 
@@ -487,14 +491,14 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
                     <span
                       className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md ${
                         isHigh
-                          ? 'bg-white text-[#285943] border border-[#78A878]/40'
-                          : 'bg-white text-[#26342D] border border-[#F4CF77]'
+                          ? 'bg-white text-[#087E8B] border border-[#45D6C7]/50'
+                          : 'bg-white text-[#24352F] border border-[#F5D778]'
                       }`}
                       title={ing.notes || `Confidence: ${ing.confidence}`}
                     >
                       {isHigh ? (
                         <>
-                          <CheckCircle2 className="w-3 h-3 text-[#78A878]" />
+                          <CheckCircle2 className="w-3 h-3 text-[#45D6C7]" />
                           <span>Verified</span>
                         </>
                       ) : (
@@ -512,8 +516,8 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
         )}
 
         {/* Action Button */}
-        <div className="pt-4 border-t border-[#E8E6DC] flex flex-col sm:flex-row items-center justify-between gap-3.5">
-          <p className="text-xs text-[#66746B]">
+        <div className="pt-4 border-t border-[#E4E8E2] flex flex-col sm:flex-row items-center justify-between gap-3.5">
+          <p className="text-xs text-[#586B63]">
             {ingredients.length > 0
               ? `Ready to plan meals with ${ingredients.length} confirmed ingredient${
                   ingredients.length > 1 ? 's' : ''
@@ -526,8 +530,8 @@ export const IngredientScanner: React.FC<IngredientScannerProps> = ({
             disabled={ingredients.length === 0}
             className={`w-full sm:w-auto px-7 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-xs transition-all ${
               ingredients.length === 0
-                ? 'bg-[#E8E6DC] text-[#66746B] cursor-not-allowed'
-                : 'bg-[#285943] hover:bg-[#1E4332] text-white cursor-pointer hover:shadow'
+                ? 'bg-[#E4E8E2] text-[#586B63] cursor-not-allowed'
+                : 'bg-[#087E8B] hover:bg-[#06626D] text-white cursor-pointer hover:shadow'
             }`}
           >
             <span>Confirm & Set Preferences</span>
